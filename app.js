@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const db = require('./dataBase/db')
+const pool = require('./dataBase/db')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,7 +15,7 @@ app.use(express.json());
 // Rota para buscar perguntas e respostas
 app.get('/perguntas', async (req, res) => {
   try {
-    const [rows] = await db.query(`
+    const [rows] = await pool.query(`
       SELECT 
         p.id AS pergunta_id,
         p.enunciado AS pergunta,
