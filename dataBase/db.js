@@ -1,12 +1,14 @@
 const mysql = require('mysql2/promise');
 
-const db = process.env.DATABASE_URL
-  ? mysql.createPool(process.env.DATABASE_URL)  // se tiver a variável de ambiente (Railway)
-  : mysql.createPool({                          // se não tiver, usa local
-      host: 'localhost',
-      user: 'root',
-      password: 'Ka980548244@',
-      database: 'dbQuizPex'
-    });
+const pool = mysql.createPool({
+  host: 'metro.proxy.rlwy.net',
+  user: 'root',
+  password: 'BpVAlDabYpOzJLtEbKTWPAXuVBbUlIVR',
+  port: 14111,
+  database: 'railway',
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
 
 module.exports = db;

@@ -5,6 +5,10 @@ let acertos = 0;
 let erros = 0;
 let timer;
 
+const baseURL = location.hostname.includes('localhost') 
+  ? 'http://localhost:3000'
+  : 'https://meuprojeto-production-2b4a.up.railway.app';
+
 // Função para embaralhar um array de forma aleatória
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -23,14 +27,19 @@ function startQuiz() {
 }
 
 function fetchQuestions() {
-    fetch('https://meuprojeto-production-2b4a.up.railway.app/perguntas')
-        .then(res => res.json())
-        .then(data => {
-            questions = data;
-            showQuestion();
-        })
-        .catch(err => console.error('Erro ao buscar perguntas:', err));
+fetch(`${baseURL}/perguntas`)
+  .then(res => res.json())
+  .then(data => {
+    questions = data;
+    showQuestion();
+  })
+  .catch(err => console.error('Erro ao buscar perguntas:', err));
 }
+
+
+
+
+
 
 function showQuestion() {
     clearTimeout(timer); // Limpa o timer anterior
