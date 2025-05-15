@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz de Tecnologia</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.3);
+      max-width: 600px;
+      width: 90%;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 80%;
+      margin: 20px 0;
+      font-size: 16px;
+    }
+
+    .start-btn, .next-btn {
+      background: linear-gradient(45deg, #00f2fe, #4facfe);
+      border: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-size: 18px;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #00f2fe, 0 0 40px #00f2fe;
+      transition: transform 0.3s;
+      margin-top: 20px;
+    }
+
+    .start-btn:hover, .next-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .answer-btn {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #00bcd4;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .answer-btn:hover {
+      background: #0097a7;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: linear-gradient(to right, red, yellow, green);
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 5px;
+      animation: countdown 10s linear forwards;
+    }
+
+    @keyframes countdown {
+      from { width: 100%; }
+      to { width: 0%; }
+    }
+
+    .ranking {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .highlight {
+      color: #00ffcc;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="start-screen">
+    <h1>Quiz de Tecnologia</h1>
+    <p>Insira seu nome ou nickname para começar:</p>
+    <input type="text" id="nickname" placeholder="Digite seu nome...">
+    <button class="start-btn" onclick="startQuiz()">Começar Quiz</button>
+  </div>
+
+  <div class="container hidden" id="quiz-screen">
+    <div id="question-box">
+      <h2 id="question-title"></h2>
+      <div id="options"></div>
+      <div class="progress-bar" id="progress"></div>
+      <button class="next-btn hidden" id="next-btn" onclick="nextQuestion()">Próxima Pergunta</button>
+    </div>
+  </div>
+
+  <div class="container hidden" id="result-screen">
+    <h2>Quiz Finalizado!</h2>
+    <p id="final-score"></p>
+    <button class="start-btn" onclick="resetQuiz()">Voltar ao Início</button>
+  </div>
+
+  <script src="index.js" defer></script>
+</body>
+</html>

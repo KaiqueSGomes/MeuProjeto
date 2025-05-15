@@ -1,0 +1,420 @@
+CREATE DATABASE dbQuizPex;
+use dbQuizPex;
+drop database dbQuizPex;
+
+CREATE TABLE temas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tema VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE niveis (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nivel VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE perguntas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    enunciado VARCHAR(255) NOT NULL,
+    tempo_resposta INT NOT NULL,
+    nivel_id INT NOT NULL,
+    tema_id INT NOT NULL,
+    FOREIGN KEY (nivel_id) REFERENCES niveis(id),
+    FOREIGN KEY (tema_id) REFERENCES temas(id)
+);
+
+CREATE TABLE respostas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    resposta VARCHAR(255) NOT NULL,
+    correta BOOLEAN NOT NULL,
+    pergunta_id INT,
+    FOREIGN KEY (pergunta_id) REFERENCES perguntas(id)
+);
+
+CREATE TABLE jogadores (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    data_nascimento DATE,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ranking (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    jogador_id INT,
+    pontuacao INT NOT NULL,
+    nivel_id INT,
+    data_partida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (jogador_id) REFERENCES jogadores(id),
+    FOREIGN KEY (nivel_id) REFERENCES niveis(id)
+);
+
+CREATE TABLE turmas (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    turma varchar(255)
+);
+
+CREATE TABLE feedback (
+	id INT PRIMARY KEY auto_increment,
+    feedback varchar(255),
+    jogador_id INT,
+    turma_id INT,
+	FOREIGN KEY (jogador_id) REFERENCES jogadores(id),
+    FOREIGN KEY (turma_id) REFERENCES turmas(id)
+);
+
+INSERT INTO niveis (nivel) VALUES
+('Fácil'),
+('Médio'),
+('Difícil');
+
+INSERT INTO turmas (turma) VALUES
+('T.I'),
+('Ed. Física'),
+('Advocacia');
+
+INSERT INTO temas (tema) VALUES
+('Segurança da Internet'),
+('Informática Básica'),
+('Office'),
+('Hardware'),
+('Inteligência Artificial'),
+('História da Tecnologia'),
+('Dispositivos Móveis'),
+('Mídias Sociais');
+
+INSERT INTO perguntas (nivel_id, enunciado, tempo_resposta, tema_id) VALUES
+(1, 'O que significa a sigla HTML?', 30, 1),
+(1, 'Qual ferramenta ajuda a detectar vírus no computador?', 30, 1),
+(1, 'Por que evitar redes Wi-Fi públicas?', 30, 1),
+(1, 'O que é phishing?', 30, 1),
+(1, 'Qual atitude ajuda a manter a segurança online?', 30, 1),
+(1, 'O que é um sistema operacional?', 30, 2),
+(1, 'Qual é a principal função do antivírus?', 30, 2),
+(1, 'O que é um firewall?', 30, 2),
+(1, 'O que significa a sigla VPN?', 30, 2),
+(1, 'Por que é importante manter os softwares atualizados?', 30, 2),
+(1, 'O que é malware?', 30, 2),
+(1, 'O que é uma rede social?', 30, 2),
+(1, 'O que é um vírus de computador?', 30, 2),
+(1, 'O que é um spyware?', 30, 2),
+(1, 'Qual é a função de um navegador de internet?', 30, 2),
+(1, 'O que é a nuvem?', 30, 1),
+(1, 'Como funciona a criptografia?', 30, 1),
+(1, 'O que é um ataque DDoS?', 30, 1),
+(1, 'O que significa a sigla URL?', 30, 1),
+(1, 'O que é um link?', 30, 1),
+(1, 'Qual a diferença entre hardware e software?', 30, 1),
+(1, 'O que é um backup?', 30, 1),
+(1, 'O que significa a sigla RAM?', 30, 1),
+(1, 'O que é o Wi-Fi?', 30, 1),
+(1, 'Como proteger sua senha?', 30, 1),
+(1, 'O que é a proteção contra ransomware?', 30, 1),
+(1, 'O que é um arquivo comprimido?', 30, 1),
+(1, 'O que é a autenticação em duas etapas?', 30, 1),
+(1, 'O que é a criptografia de ponta a ponta?', 30, 1),
+(1, 'O que é o phishing por SMS?', 30, 1),
+(1, 'O que é a privacidade online?', 30, 1),
+(1, 'O que significa HTTPS?', 30, 1),
+(1, 'O que é um pop-up?', 30, 1),
+(1, 'Como identificar e-mails falsos?', 30, 1),
+(1, 'O que são cookies em um site?', 30, 1),
+(1, 'Qual a diferença entre HTTP e HTTPS?', 30, 1),
+(1, 'O que é um vírus de e-mail?', 30, 1),
+(1, 'O que é um trojan?', 30, 1),
+(1, 'O que é um bot?', 30, 1),
+(1, 'O que é um ataque Man-in-the-Middle?', 30, 1),
+(1, 'O que significa a sigla DNS?', 30, 1),
+(1, 'Como se protege contra ataques de engenharia social?', 30, 1),
+(1, 'O que é o conceito de “segurança em profundidade”?', 30, 1),
+(1, 'Por que usar senhas fortes?', 30, 1),
+(1, 'Qual a diferença entre vírus e worm?', 30, 1),
+(1, 'O que é a segurança por obfuscação?', 30, 1),
+(1, 'O que é uma chave pública na criptografia?', 30, 1),
+(1, 'O que é um vírus de e-mail?', 30, 1),
+(1, 'O que é um trojan?', 30, 1),
+(1, 'O que é um bot?', 30, 1);
+
+INSERT INTO respostas (pergunta_id, resposta, correta) VALUES
+(1, 'Linguagem de Marcação de Hipertexto', TRUE),
+(1, 'Linguagem de Programação', FALSE),
+(1, 'Editor de Texto', FALSE),
+(1, 'Sistema Operacional', FALSE),
+
+(2, 'Antivírus', TRUE),
+(2, 'Editor de texto', FALSE),
+(2, 'Navegador de internet', FALSE),
+(2, 'Gerenciador de arquivos', FALSE),
+
+(3, 'Porque pode ser uma ameaça à segurança dos dados', TRUE),
+(3, 'Porque a internet é lenta', FALSE),
+(3, 'Porque o Wi-Fi é caro', FALSE),
+(3, 'Porque não há senha', FALSE),
+
+(4, 'É uma tentativa de enganar pessoas para obter informações confidenciais', TRUE),
+(4, 'É um tipo de vírus', FALSE),
+(4, 'É uma ferramenta de segurança', FALSE),
+(4, 'É um protocolo de internet', FALSE),
+
+(5, 'Usar senhas fortes e não compartilhar informações pessoais', TRUE),
+(5, 'Navegar apenas em sites conhecidos', FALSE),
+(5, 'Desabilitar o firewall', FALSE),
+(5, 'Desconectar-se da internet', FALSE),
+
+(6, 'É o software que gerencia os recursos de hardware e software do computador', TRUE),
+(6, 'É um programa de edição de texto', FALSE),
+(6, 'É um tipo de navegador de internet', FALSE),
+(6, 'É uma ferramenta de design gráfico', FALSE),
+
+(7, 'Detectar e remover vírus do computador', TRUE),
+(7, 'Ajudar a criar sites', FALSE),
+(7, 'Aumentar a velocidade da internet', FALSE),
+(7, 'Gerenciar arquivos no computador', FALSE),
+
+(8, 'Controlar o tráfego de rede e proteger contra acessos não autorizados', TRUE),
+(8, 'Ajudar a melhorar a performance do computador', FALSE),
+(8, 'Aumentar a velocidade da conexão de internet', FALSE),
+(8, 'Salvar arquivos no computador', FALSE),
+
+(9, 'Virtual Private Network', TRUE),
+(9, 'Very Private Network', FALSE),
+(9, 'Virtual Personal Network', FALSE),
+(9, 'Variable Private Network', FALSE),
+
+(10, 'Evita vulnerabilidades que podem ser exploradas por atacantes', TRUE),
+(10, 'Deixa o computador mais rápido', FALSE),
+(10, 'Melhora a conexão Wi-Fi', FALSE),
+(10, 'Facilita o download de arquivos', FALSE),
+
+(11, 'Programa que prejudica o funcionamento do computador', TRUE),
+(11, 'Programa que acelera a internet', FALSE),
+(11, 'Programa que organiza arquivos', FALSE),
+(11, 'Programa que melhora a performance gráfica', FALSE),
+
+(12, 'Plataforma para interagir com outras pessoas e compartilhar conteúdo', TRUE),
+(12, 'Ferramenta para editar imagens', FALSE),
+(12, 'Aplicativo para fazer compras', FALSE),
+(12, 'Aplicativo para criar sites', FALSE),
+
+(13, 'Software que se replica e pode danificar o computador', TRUE),
+(13, 'Software para fazer backup de dados', FALSE),
+(13, 'Software de navegação na internet', FALSE),
+(13, 'Software de design gráfico', FALSE),
+
+(14, 'Programa que monitora e coleta dados sem o conhecimento do usuário', TRUE),
+(14, 'Ferramenta de edição de vídeos', FALSE),
+(14, 'Aplicativo para melhorar a segurança da rede', FALSE),
+(14, 'Sistema para proteger a privacidade online', FALSE),
+
+(15, 'Programa usado para acessar sites na internet', TRUE),
+(15, 'Software de criação de documentos', FALSE),
+(15, 'Software de edição de imagens', FALSE),
+(15, 'Aplicativo de redes sociais', FALSE),
+
+(16, 'Serviço de armazenamento de dados online', TRUE),
+(16, 'Plataforma para vender produtos', FALSE),
+(16, 'Programa para otimizar a memória RAM', FALSE),
+(16, 'Aplicativo para editar fotos', FALSE),
+
+(17, 'Transformação de dados em um formato codificado para proteção', TRUE),
+(17, 'Armazenamento de dados em servidores externos', FALSE),
+(17, 'Compressão de dados para enviar mais rápido', FALSE),
+(17, 'Ferramenta de edição de texto', FALSE),
+
+(18, 'Distributed Denial of Service', TRUE),
+(18, 'Direct Digital Online Service', FALSE),
+(18, 'Digital Data Online Security', FALSE),
+(18, 'Direct Data Online Security', FALSE),
+
+(19, 'Uniform Resource Locator', TRUE),
+(19, 'Universal Reference Link', FALSE),
+(19, 'Universal Resource Location', FALSE),
+(19, 'Unified Resource List', FALSE),
+
+(20, 'Um endereço que leva a uma página na internet', TRUE),
+(20, 'Um tipo de vírus', FALSE),
+(20, 'Um software de segurança', FALSE),
+(20, 'Um dispositivo eletrônico', FALSE),
+
+(21, 'Hardware é a parte física e software é a parte lógica', TRUE),
+(21, 'Hardware é mais barato que software', FALSE),
+(21, 'Software é a carcaça do computador', FALSE),
+(21, 'Hardware é o sistema operacional', FALSE),
+
+(22, 'Cópia de segurança dos dados', TRUE),
+(22, 'Sistema operacional alternativo', FALSE),
+(22, 'Editor de planilhas', FALSE),
+(22, 'Antivírus portátil', FALSE),
+
+(23, 'Memória de Acesso Aleatório', TRUE),
+(23, 'Rede de Acesso Manual', FALSE),
+(23, 'Módulo de Arquivamento Rápido', FALSE),
+(23, 'Memória de Apoio à Máquina', FALSE),
+
+(24, 'Tecnologia sem fio para conexão de dispositivos', TRUE),
+(24, 'Nome de um sistema operacional', FALSE),
+(24, 'Dispositivo de segurança', FALSE),
+(24, 'Tipo de antivírus', FALSE),
+
+(25, 'Criando senhas fortes e únicas', TRUE),
+(25, 'Escrevendo senhas em papel', FALSE),
+(25, 'Usando senhas curtas', FALSE),
+(25, 'Utilizando datas de nascimento como senha', FALSE),
+
+(26, 'Bloqueia acesso a arquivos importantes exigindo pagamento', TRUE),
+(26, 'Acelera o desempenho da internet', FALSE),
+(26, 'Desinstala programas maliciosos automaticamente', FALSE),
+(26, 'Aumenta a velocidade de download', FALSE),
+
+(27, 'Arquivo reduzido para ocupar menos espaço', TRUE),
+(27, 'Arquivo duplicado', FALSE),
+(27, 'Arquivo corrompido', FALSE),
+(27, 'Arquivo de vírus', FALSE),
+
+(28, 'Confirmação com dois fatores de identificação', TRUE),
+(28, 'Sistema para atualizar senhas automaticamente', FALSE),
+(28, 'Ferramenta de criptografia de rede', FALSE),
+(28, 'Editor de permissões de arquivos', FALSE),
+
+(29, 'Protege mensagens durante todo o trajeto entre remetente e destinatário', TRUE),
+(29, 'Aumenta o tamanho dos arquivos', FALSE),
+(29, 'Remove vírus automaticamente', FALSE),
+(29, 'Impede o uso da internet', FALSE),
+
+(30, 'É uma forma de enganar usuários por mensagens de texto', TRUE),
+(30, 'É um tipo de atualização de software', FALSE),
+(30, 'É um erro no sistema operacional', FALSE),
+(30, 'É uma ferramenta de edição de mensagens', FALSE),
+
+(31, 'Capacidade de controlar e limitar o que é compartilhado online', TRUE),
+(31, 'Desconexão total da internet', FALSE),
+(31, 'Uso de múltiplos dispositivos', FALSE),
+(31, 'Abertura de todas as informações para o público', FALSE),
+
+(32, 'HyperText Transfer Protocol Secure', TRUE),
+(32, 'High Transfer Text Standard', FALSE),
+(32, 'Hyper Tool for Technical Safety', FALSE),
+(32, 'High-level Text Protocol', FALSE),
+
+(33, 'Janela que aparece automaticamente em um site', TRUE),
+(33, 'Erro do sistema', FALSE),
+(33, 'Tipo de vírus', FALSE),
+(33, 'Software de edição de texto', FALSE),
+
+(34, 'Verificando remetente e links suspeitos', TRUE),
+(34, 'Clicando em todos os links recebidos', FALSE),
+(34, 'Ignorando e-mails do trabalho', FALSE),
+(34, 'Reenviando e-mails duvidosos para amigos', FALSE),
+
+(35, 'Pequenos arquivos que armazenam informações do usuário', TRUE),
+(35, 'Vídeos automáticos', FALSE),
+(35, 'Imagens de fundo do site', FALSE),
+(35, 'Erros de programação', FALSE),
+
+(36, 'HTTPS é seguro, HTTP não possui criptografia', TRUE),
+(36, 'Não há diferença', FALSE),
+(36, 'HTTP é mais rápido', FALSE),
+(36, 'HTTPS é usado apenas por bancos', FALSE),
+
+(37, 'Vírus enviado por meio de e-mails falsos', TRUE),
+(37, 'Programa de segurança digital', FALSE),
+(37, 'Atualização automática de antivírus', FALSE),
+(37, 'Tipo de criptografia', FALSE),
+
+(38, 'Programa disfarçado que executa ações maliciosas', TRUE),
+(38, 'Ferramenta para limpar o computador', FALSE),
+(38, 'Antivírus gratuito', FALSE),
+(38, 'Extensão de navegador', FALSE),
+
+(39, 'Programa automatizado que executa tarefas repetitivas', TRUE),
+(39, 'Computador antigo', FALSE),
+(39, 'Erro no sistema', FALSE),
+(39, 'Aplicativo de mensagens', FALSE),
+
+(40, 'Interceptação de dados entre dois pontos de comunicação', TRUE),
+(40, 'Erro ao instalar antivírus', FALSE),
+(40, 'Atualização de navegador', FALSE),
+(40, 'Envio de e-mails com anexos grandes', FALSE),
+
+(41, 'Domain Name System', TRUE),
+(41, 'Data Network System', FALSE),
+(41, 'Device Node Service', FALSE),
+(41, 'Digital Network Standard', FALSE),
+
+(42, 'Desconfiando de contatos que pedem dados pessoais', TRUE),
+(42, 'Ignorando atualizações de software', FALSE),
+(42, 'Desativando o antivírus', FALSE),
+(42, 'Clicando em links desconhecidos', FALSE),
+
+(43, 'Várias camadas de defesa para proteger sistemas', TRUE),
+(43, 'Senha com mais de 10 caracteres', FALSE),
+(43, 'Rede Wi-Fi mais rápida', FALSE),
+(43, 'Desconexão frequente da internet', FALSE),
+
+(44, 'Elas são difíceis de adivinhar e reduzem riscos', TRUE),
+(44, 'Facilitam lembrar datas importantes', FALSE),
+(44, 'Tornam o computador mais rápido', FALSE),
+(44, 'Permitem compartilhar com amigos', FALSE),
+
+(45, 'Vírus precisa de ação do usuário, worm se propaga sozinho', TRUE),
+(45, 'Worms são mais lentos', FALSE),
+(45, 'Vírus só afeta internet', FALSE),
+(45, 'Worms não existem mais', FALSE),
+
+(46, 'Ocultar detalhes técnicos para dificultar ataques', TRUE),
+(46, 'Proteger com firewall', FALSE),
+(46, 'Usar antivírus gratuito', FALSE),
+(46, 'Desligar o Wi-Fi', FALSE),
+
+(47, 'Código público usado para criptografar dados', TRUE),
+(47, 'Chave para acessar redes Wi-Fi', FALSE),
+(47, 'Senha de administrador', FALSE),
+(47, 'Identificador de usuário', FALSE),
+
+(48, 'Dispositivo que conecta redes diferentes e encaminha dados', TRUE),
+(48, 'Aplicativo de edição de vídeos', FALSE),
+(48, 'Antivírus portátil', FALSE),
+(48, 'Disco rígido externo', FALSE),
+
+(49, 'Técnica de roubo de informações usando chamadas telefônicas', TRUE),
+(49, 'Erro no sistema de login', FALSE),
+(49, 'Bug em aplicativos de mensagem', FALSE),
+(49, 'Método de autenticação', FALSE),
+
+(50, 'Conjunto de regras e ferramentas que garantem segurança digital', TRUE),
+(50, 'Aplicativo de criptografia', FALSE),
+(50, 'Antivírus instalado em servidores', FALSE),
+(50, 'Extensão de navegador segura', FALSE);
+
+SELECT id, enunciado FROM perguntas;
+
+SHOW tables;
+DESCRIBE respostas;
+
+SELECT r.resposta, r.correta
+FROM respostas r
+WHERE r.pergunta_id = 1;
+
+SELECT * FROM perguntas WHERE nivel = 'Fácil';
+
+SELECT p.enunciado, t.nome AS tema
+FROM perguntas p
+JOIN temas t ON p.tema_id = t.id;
+
+SELECT j.nome, r.pontuacao, r.nivel, r.data_partida
+FROM ranking r
+JOIN jogadores j ON r.jogador_id = j.id
+ORDER BY r.pontuacao DESC;
+
+SELECT j.nome, d.perguntas_acertadas, d.tempo_total, d.nivel
+FROM desempenho d
+JOIN jogadores j ON d.jogador_id = j.id;
+
+SELECT j.nome, e.tentativas, e.erros, e.tempo_medio_por_pergunta
+FROM estatisticas_jogo e
+JOIN jogadores j ON e.jogador_id = j.id;
+
+describe perguntas;
+
+SELECT * FROM perguntas WHERE nivel_id = 1;
+
+SELECT * FROM perguntas WHERE nivel_id = 1;
