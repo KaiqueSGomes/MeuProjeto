@@ -4,9 +4,9 @@ const cors = require('cors');
 const db = require('./dataBase/db')
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Servidor rodando na porta ${port}`);
 });
 
 
@@ -55,7 +55,7 @@ app.get('/perguntas', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`)
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`)
   console.log(`Vai corinthians!!!`);
 });
