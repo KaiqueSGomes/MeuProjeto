@@ -1,6 +1,6 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
 const cors = require('cors');
+const db = require('./dataBase/db')
 
 const app = express();
 const PORT = 3000;
@@ -9,13 +9,6 @@ app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
 
-// Conexão com o banco de dados
-const db = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'Ka980548244@', // sua senha do MySQL, se tiver
-  database: 'dbQuizPex' // nome do banco de dados que você criou
-});
 
 // Rota para buscar perguntas e respostas
 app.get('/perguntas', async (req, res) => {
