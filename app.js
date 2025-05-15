@@ -5,6 +5,9 @@ const db = require('./dataBase/db')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 
 
 app.use(express.static('public'));

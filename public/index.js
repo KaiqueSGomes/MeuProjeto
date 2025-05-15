@@ -23,7 +23,7 @@ function startQuiz() {
 }
 
 function fetchQuestions() {
-    fetch('/perguntas')
+    fetch('https://meuprojeto-production-2b4a.up.railway.app/perguntas')
         .then(res => res.json())
         .then(data => {
             questions = data;
