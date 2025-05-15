@@ -1,5 +1,4 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
 
 const db = process.env.DATABASE_URL
   ? mysql.createPool(process.env.DATABASE_URL)  // se tiver a variável de ambiente (Railway)
