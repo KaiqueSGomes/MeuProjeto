@@ -12,46 +12,33 @@ app.use(cors());
 app.use(express.json());
 
 
-
-
 // Rota para buscar perguntas e respostas
 app.get('/perguntas', async (req, res) => {
-  const sql = `
-    SELECT p.id AS pergunta_id, p.enunciado, p.tempo_resposta,
-    r.id AS resposta_id, r.resposta, r.correta
-      FROM perguntas p
-      JOIN respostas r ON p.id = r.pergunta_id;
-  `;
-
   try {
-    const [results] = await pool.query(sql);
+    const [perguntas] = await pool.query('SELECT * FROM perguntas');
 
-    const perguntasMap = {};
-    results.forEach(row => {
-      const id = row.pergunta_id;
+    const perguntasComRespostas = await Promise.all(perguntas.map(async (p) => {
+      const [respostas] = await pool.query('SELECT * FROM respostas WHERE pergunta_id = ?', [p.id]);
+      return {
+        id: p.id,
+        pergunta: p.enunciado,
+        tempo_resposta: p.tempo_resposta,
+        respostas: respostas.map(r => ({
+          texto: r.resposta,
+          correta: r.correta === 1
+        }))
+      };
+    }));
 
-      if (!perguntasMap[id]) {
-        perguntasMap[id] = {
-          pergunta: row.pergunta,
-          tempo_resposta: row.tempo_resposta,
-          respostas: []
-        };
-      }
-
-      perguntasMap[id].respostas.push({
-        texto: row.texto,
-        correta: row.correta === 1
-      });
-    });
-
-    const perguntas = Object.values(perguntasMap);
-    res.json(perguntas);
-
-  } catch (err) {
-    console.error("Erro ao buscar perguntas:", err);
-    res.status(500).json({ error: "Erro no banco de dados" });
+    res.json(perguntasComRespostas);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro ao buscar perguntas' });
   }
 });
+
+
+
 
 
 
