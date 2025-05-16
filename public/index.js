@@ -70,8 +70,10 @@ function showQuestion() {
   const optionsDiv = document.getElementById('options');
   optionsDiv.innerHTML = '';
 
+  // Embaralha respostas
   shuffleArray(question.respostas);
 
+  // Garante 4 respostas
   question.respostas.forEach(resposta => {
     const btn = document.createElement('button');
     btn.textContent = resposta.texto;
@@ -83,6 +85,7 @@ function showQuestion() {
   document.getElementById('next-btn').classList.add('hidden');
   document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
 
+  // Barra de progresso e timer
   const progressBar = document.getElementById('progress');
   progressBar.style.animation = 'none';
   progressBar.offsetHeight;
@@ -92,9 +95,16 @@ function showQuestion() {
     alert("⏰ Tempo esgotado!");
     erros++;
     pontos = Math.max(0, pontos - 1);
-    nextQuestion();
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
   }, question.tempo_resposta * 1000);
 }
+
+
 
 // Trata a resposta do usuário
 function handleAnswer(resposta) {
