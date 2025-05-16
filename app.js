@@ -15,33 +15,41 @@ app.use(express.json());
 // Rota para buscar perguntas e respostas
 app.get('/perguntas', async (req, res) => {
   try {
-    const [perguntas] = await pool.query('SELECT * FROM perguntas');
+    const temas = [1, 2, 3, 4, 5];
+    let perguntasComRespostas = [];
 
-    const perguntasComRespostas = await Promise.all(perguntas.map(async (p) => {
-      const [respostas] = await pool.query('SELECT * FROM respostas WHERE pergunta_id = ?', [p.id]);
-      return {
-        id: p.id,
-        pergunta: p.enunciado,
-        tempo_resposta: p.tempo_resposta,
-        respostas: respostas.map(r => ({
-          texto: r.resposta,
-          correta: r.correta === 1
-        }))
-      };
-    }));
+    for (const temaId of temas) {
+      // Busca 2 perguntas aleatórias do tema
+      const [perguntas] = await pool.query(
+        'SELECT * FROM perguntas WHERE tema_id = ? ORDER BY RAND() LIMIT 2',
+        [temaId]
+      );
+
+      for (const p of perguntas) {
+        // Busca respostas para cada pergunta
+        const [respostas] = await pool.query(
+          'SELECT * FROM respostas WHERE pergunta_id = ?',
+          [p.id]
+        );
+
+        perguntasComRespostas.push({
+          id: p.id,
+          pergunta: p.enunciado,
+          tempo_resposta: p.tempo_resposta,
+          respostas: respostas.map(r => ({
+            texto: r.resposta,
+            correta: r.correta === 1,
+          }))
+        });
+      }
+    }
 
     res.json(perguntasComRespostas);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Erro ao buscar perguntas' });
+    res.status(500).json({ erro: 'Erro ao buscar perguntas' });
   }
 });
-
-
-
-
-
-
 
 
 app.listen(port, () => {
