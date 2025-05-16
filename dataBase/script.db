@@ -34,7 +34,8 @@ CREATE TABLE jogadores (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    data_nascimento DATE,
+    turma_id INT,
+    foreign key (turma_id) references turmas(id),
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -79,7 +80,8 @@ INSERT INTO turmas (turma, sala) VALUES
 ('Direito', 4),
 ('Direito', 14),
 ('Direito', 16),
-('Direito', 12);
+('Direito', 12),
+('Nenhum', 0);
 
 INSERT INTO temas (tema) VALUES
 ('Segurança da Internet'), -- 1

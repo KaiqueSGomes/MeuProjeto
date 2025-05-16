@@ -26,7 +26,7 @@
       width: 90%;
     }
 
-    input[type="text"] {
+    input[type="text"], select {
       padding: 10px;
       border-radius: 8px;
       border: none;
@@ -86,11 +86,6 @@
       to { width: 0%; }
     }
 
-    .ranking {
-      margin-top: 20px;
-      text-align: left;
-    }
-
     .highlight {
       color: #00ffcc;
       font-weight: bold;
@@ -98,12 +93,45 @@
   </style>
 </head>
 <body>
-  <div class="container" id="start-screen">
+  <div class="container" id="name-screen">
     <h1>Quiz de Tecnologia</h1>
-    <p>Insira seu nome ou nickname para começar:</p>
+    <p>Digite seu nome e email:</p>
     <input type="text" id="nickname" placeholder="Digite seu nome...">
-    <button class="start-btn" onclick="startQuiz()">Começar Quiz</button>
+    <input type="text" id="email" placeholder="Digite seu Email...">
+    <button class="start-btn" onclick="goToTurma()">Avançar</button>
   </div>
+
+  <div class="container hidden" id="turma-screen">
+  <h1>Quiz de Tecnologia</h1>
+  <p>Insira sua Turma e Sala para começar:</p>
+  <form id="turma-form">
+    <select name="turma_id" id="curso" required>
+      <option value="">-- Selecione sua turma --</option>
+      <option value="1">Análise e Desenvolvimento de Sistemas - Sala 7</option>
+      <option value="2">Gestão da Tecnologia da Informação - Sala 7</option>
+      <option value="3">Ciências Contábeis - Sala 19</option>
+      <option value="4">Administração - Sala 19</option>
+      <option value="5">Logística - Sala 15</option>
+      <option value="6">Ed. Física - Sala 5</option>
+      <option value="7">Ed. Física - Sala 6</option>
+      <option value="8">Direito - Sala 4</option>
+      <option value="9">Direito - Sala 14</option>
+      <option value="10">Direito - Sala 16</option>
+      <option value="11">Direito - Sala 12</option>
+      <option value="12">Nenhum</option>
+    </select>
+
+    <p>Você é:</p>
+    <label>
+      <input type="radio" name="tipo_usuario" value="aluno" required> Aluno
+    </label>
+    <label style="margin-left: 20px;">
+      <input type="radio" name="tipo_usuario" value="colaborador" required> Colaborador
+    </label>
+  </form>
+  <button class="start-btn" onclick="startQuiz()">Começar Quiz</button>
+</div>
+
 
   <div class="container hidden" id="quiz-screen">
     <div id="question-box">

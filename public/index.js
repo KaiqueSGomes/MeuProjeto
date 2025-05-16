@@ -17,14 +17,37 @@ function shuffleArray(array) {
     }
 }
 
-function startQuiz() {
-    const nome = document.getElementById('nickname').value.trim();
-    if (!nome) return alert("Digite seu nome!");
+function goToTurma() {
+  const nome = document.getElementById('nickname').value.trim();
+  if (!nome) return alert("Digite seu nome!");
+  const playerEmail  = document.getElementById('email').value;
+    if(!playerEmail) return alert("Digite seu Email");
 
-    document.getElementById('start-screen').classList.add('hidden');
-    document.getElementById('quiz-screen').classList.remove('hidden');
-    fetchQuestions();
+
+  document.getElementById('name-screen').classList.add('hidden');
+  document.getElementById('turma-screen').classList.remove('hidden');
 }
+
+function startQuiz() {
+  const turma = document.getElementById('curso').value;
+  if (!turma) return alert("Escolha sua turma!");
+
+  const tipoUsuario = document.querySelector('input[name="tipo_usuario"]:checked');
+  if (!tipoUsuario) return alert("Selecione se você é aluno ou colaborador!");
+
+  // Aqui você pode salvar essas infos num objeto ou mandar pro servidor
+  const usuario = {
+    turma,
+    tipo: tipoUsuario.value
+  };
+
+  console.log("Usuário:", usuario); // só para testes
+
+  document.getElementById('turma-screen').classList.add('hidden');
+  document.getElementById('quiz-screen').classList.remove('hidden');
+  fetchQuestions();
+}
+
 
 function fetchQuestions() {
 fetch(`${baseURL}/perguntas`)
@@ -35,11 +58,6 @@ fetch(`${baseURL}/perguntas`)
   })
   .catch(err => console.error('Erro ao buscar perguntas:', err));
 }
-
-
-
-
-
 
 function showQuestion() {
     clearTimeout(timer); // Limpa o timer anterior
