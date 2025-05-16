@@ -50,7 +50,8 @@ CREATE TABLE ranking (
 
 CREATE TABLE turmas (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    turma varchar(255)
+    turma varchar(255),
+    sala int
 );
 
 CREATE TABLE feedback (
@@ -67,20 +68,25 @@ INSERT INTO niveis (nivel) VALUES
 ('Médio'),
 ('Difícil');
 
-INSERT INTO turmas (turma) VALUES
-('T.I'),
-('Ed. Física'),
-('Advocacia');
+INSERT INTO turmas (turma, sala) VALUES
+('Análise e Desenvolvimento de Sistemas', 7),
+('Gestão da	Tecnologia da Informação', 7),
+('Ciências Contábeis', 19),
+('Administração', 19),
+('Logística', 15),
+('Ed. Física', 5),
+('Ed. Física', 6),
+('Direito', 4),
+('Direito', 14),
+('Direito', 16),
+('Direito', 12);
 
 INSERT INTO temas (tema) VALUES
-('Segurança da Internet'),
-('Informática Básica'),
-('Office'),
-('Hardware'),
-('Inteligência Artificial'),
-('História da Tecnologia'),
-('Dispositivos Móveis'),
-('Mídias Sociais');
+('Segurança da Internet'), -- 1
+('Informática Básica'), -- 2
+('Inteligência Artificial'), -- 3
+('História da Tecnologia'), -- 4
+('Mídias Sociais'); -- 5
 
 INSERT INTO perguntas (nivel_id, enunciado, tempo_resposta, tema_id) VALUES
 (1, 'O que significa a sigla HTML?', 30, 1),
@@ -385,36 +391,4 @@ INSERT INTO respostas (pergunta_id, resposta, correta) VALUES
 (50, 'Antivírus instalado em servidores', FALSE),
 (50, 'Extensão de navegador segura', FALSE);
 
-SELECT id, enunciado FROM perguntas;
 
-SHOW tables;
-DESCRIBE respostas;
-
-SELECT r.resposta, r.correta
-FROM respostas r
-WHERE r.pergunta_id = 1;
-
-SELECT * FROM perguntas WHERE nivel = 'Fácil';
-
-SELECT p.enunciado, t.nome AS tema
-FROM perguntas p
-JOIN temas t ON p.tema_id = t.id;
-
-SELECT j.nome, r.pontuacao, r.nivel, r.data_partida
-FROM ranking r
-JOIN jogadores j ON r.jogador_id = j.id
-ORDER BY r.pontuacao DESC;
-
-SELECT j.nome, d.perguntas_acertadas, d.tempo_total, d.nivel
-FROM desempenho d
-JOIN jogadores j ON d.jogador_id = j.id;
-
-SELECT j.nome, e.tentativas, e.erros, e.tempo_medio_por_pergunta
-FROM estatisticas_jogo e
-JOIN jogadores j ON e.jogador_id = j.id;
-
-describe perguntas;
-
-SELECT * FROM perguntas WHERE nivel_id = 1;
-
-SELECT * FROM perguntas WHERE nivel_id = 1;
