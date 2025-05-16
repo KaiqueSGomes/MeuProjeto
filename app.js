@@ -51,6 +51,16 @@ app.get('/perguntas', async (req, res) => {
   }
 });
 
+app.get('/turmas', async (req, res) => {
+  try {
+    const [rows] = await pool.query('SELECT id, turma, sala FROM turmas ORDER BY turma, sala');
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ erro: 'Erro ao buscar turmas' });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`)

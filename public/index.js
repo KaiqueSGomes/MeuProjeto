@@ -119,7 +119,6 @@ function handleAnswer(resposta) {
     acertos++;
   } else {
     alert("❌ Resposta errada!");
-    pontos = Math.max(0, pontos - 1);
     erros++;
   }
 
