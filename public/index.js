@@ -157,5 +157,5 @@ function resetQuiz() {
   erros = 0;
 
   document.getElementById('result-screen').classList.add('hidden');
-  document.getElementById('start-screen').classList.remove('hidden');
+  document.getElementById('name-screen').classList.remove('hidden');
 }

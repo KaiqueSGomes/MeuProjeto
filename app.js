@@ -12,73 +12,44 @@ app.use(cors());
 app.use(express.json());
 
 
+
+
 // Rota para buscar perguntas e respostas
 app.get('/perguntas', async (req, res) => {
-  try {
-    const [rows] = await pool.query(`
-      SELECT 
-        p.id AS pergunta_id,
-        p.enunciado AS pergunta,
-        p.tempo_resposta,
-        p.tema,
-        r.id AS resposta_id,
-        r.resposta,
-        r.correta
+  const sql = `
+    SELECT p.id AS pergunta_id, p.enunciado, p.tempo_resposta,
+    r.id AS resposta_id, r.resposta, r.correta
       FROM perguntas p
-      JOIN respostas r ON r.pergunta_id = p.id
-    `);
+      JOIN respostas r ON p.id = r.pergunta_id;
+  `;
 
-    const perguntasMap = new Map();
+  try {
+    const [results] = await pool.query(sql);
 
-    rows.forEach(row => {
-      if (!perguntasMap.has(row.pergunta_id)) {
-        perguntasMap.set(row.pergunta_id, {
-          id: row.pergunta_id,
+    const perguntasMap = {};
+    results.forEach(row => {
+      const id = row.pergunta_id;
+
+      if (!perguntasMap[id]) {
+        perguntasMap[id] = {
           pergunta: row.pergunta,
           tempo_resposta: row.tempo_resposta,
-          tema: row.tema,
           respostas: []
-        });
+        };
       }
-      perguntasMap.get(row.pergunta_id).respostas.push({
-        id: row.resposta_id,
-        texto: row.resposta,
-        correta: !!row.correta
+
+      perguntasMap[id].respostas.push({
+        texto: row.texto,
+        correta: row.correta === 1
       });
     });
 
-    // Filtra apenas perguntas que tenham exatamente 4 respostas
-    const perguntasValidas = Array.from(perguntasMap.values()).filter(p => p.respostas.length === 4);
+    const perguntas = Object.values(perguntasMap);
+    res.json(perguntas);
 
-    // Agrupa por tema
-    const temasMap = {};
-    perguntasValidas.forEach(pergunta => {
-      if (!temasMap[pergunta.tema]) temasMap[pergunta.tema] = [];
-      temasMap[pergunta.tema].push(pergunta);
-    });
-
-    // Função para embaralhar array
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
-
-    // Seleciona 2 perguntas de cada tema embaralhado
-    const perguntasSelecionadas = [];
-    for (const tema in temasMap) {
-      shuffleArray(temasMap[tema]);
-      perguntasSelecionadas.push(...temasMap[tema].slice(0, 2));
-    }
-
-    shuffleArray(perguntasSelecionadas);
-
-    res.json(perguntasSelecionadas);
-
-  } catch (error) {
-    console.error('Erro ao buscar perguntas:', error);
-    res.status(500).json({ error: 'Erro ao buscar perguntas' });
+  } catch (err) {
+    console.error("Erro ao buscar perguntas:", err);
+    res.status(500).json({ error: "Erro no banco de dados" });
   }
 });
 
