@@ -9,148 +9,143 @@ const baseURL = location.hostname.includes('localhost')
   ? 'http://localhost:3000'
   : 'https://meuprojeto-production-2b4a.up.railway.app';
 
-// Função para embaralhar um array de forma aleatória
+// Embaralha um array
 function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]; // Troca os elementos
-    }
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
 }
 
+// Vai para a tela de turma
 function goToTurma() {
   const nome = document.getElementById('nickname').value.trim();
-  if (!nome) return alert("Digite seu nome!");
-  const playerEmail  = document.getElementById('email').value;
-    if(!playerEmail) return alert("Digite seu Email");
+  const email = document.getElementById('email').value.trim();
 
+  if (!nome) return alert("Digite seu nome!");
+  if (!email) return alert("Digite seu email!");
 
   document.getElementById('name-screen').classList.add('hidden');
   document.getElementById('turma-screen').classList.remove('hidden');
 }
 
+// Inicia o quiz
 function startQuiz() {
   const turma = document.getElementById('curso').value;
-  if (!turma) return alert("Escolha sua turma!");
-
   const tipoUsuario = document.querySelector('input[name="tipo_usuario"]:checked');
+
+  if (!turma) return alert("Escolha sua turma!");
   if (!tipoUsuario) return alert("Selecione se você é aluno ou colaborador!");
 
-  // Aqui você pode salvar essas infos num objeto ou mandar pro servidor
   const usuario = {
     turma,
     tipo: tipoUsuario.value
   };
 
-  console.log("Usuário:", usuario); // só para testes
+  console.log("Usuário:", usuario);
 
   document.getElementById('turma-screen').classList.add('hidden');
   document.getElementById('quiz-screen').classList.remove('hidden');
   fetchQuestions();
 }
 
-
+// Busca as perguntas da API
 function fetchQuestions() {
-fetch(`${baseURL}/perguntas`)
-  .then(res => res.json())
-  .then(data => {
-    questions = data;
-    showQuestion();
-  })
-  .catch(err => console.error('Erro ao buscar perguntas:', err));
+  fetch(`${baseURL}/perguntas`)
+    .then(res => res.json())
+    .then(data => {
+      questions = data;
+      showQuestion();
+    })
+    .catch(err => console.error('Erro ao buscar perguntas:', err));
 }
 
+// Mostra a pergunta atual
 function showQuestion() {
-    clearTimeout(timer); // Limpa o timer anterior
+  clearTimeout(timer);
 
-    const question = questions[currentQuestionIndex];
-    document.getElementById('question-title').textContent = question.pergunta;
+  const question = questions[currentQuestionIndex];
+  document.getElementById('question-title').textContent = question.pergunta;
 
-    const optionsDiv = document.getElementById('options');
-    optionsDiv.innerHTML = ''; // Limpa opções anteriores
+  const optionsDiv = document.getElementById('options');
+  optionsDiv.innerHTML = '';
 
-    // Embaralha as respostas antes de exibi-las
-    shuffleArray(question.respostas);
+  shuffleArray(question.respostas);
 
-    question.respostas.forEach(resposta => {
-        const btn = document.createElement('button');
-        btn.textContent = resposta.texto;
-        btn.classList.add('answer-btn');
-        btn.onclick = () => handleAnswer(resposta);
-        optionsDiv.appendChild(btn);
-    });
+  question.respostas.forEach(resposta => {
+    const btn = document.createElement('button');
+    btn.textContent = resposta.texto;
+    btn.classList.add('answer-btn');
+    btn.onclick = () => handleAnswer(resposta);
+    optionsDiv.appendChild(btn);
+  });
 
-    // Oculta o botão "Próxima" até que o jogador tenha respondido
-    document.getElementById('next-btn').classList.add('hidden');
-    document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
+  document.getElementById('next-btn').classList.add('hidden');
+  document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = false);
 
-    // Reinicia a animação da barra de progresso
-    const progressBar = document.getElementById('progress');
-    progressBar.style.animation = 'none';
-    progressBar.offsetHeight; // Força reflow da barra de progresso
-    progressBar.style.animation = 'countdown 10s linear forwards'; // Reinicia a animação
+  const progressBar = document.getElementById('progress');
+  progressBar.style.animation = 'none';
+  progressBar.offsetHeight;
+  progressBar.style.animation = `countdown ${question.tempo_resposta}s linear forwards`;
 
-    // Inicia o timer de 10 segundos para a pergunta
-    timer = setTimeout(() => {
-        alert("⏰ Tempo esgotado!");
-        erros++;
-        pontos = Math.max(0, pontos - 1);
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            showQuestion();
-        } else {
-            showResults();
-        }
-    }, 10000);
+  timer = setTimeout(() => {
+    alert("⏰ Tempo esgotado!");
+    erros++;
+    pontos = Math.max(0, pontos - 1);
+    nextQuestion();
+  }, question.tempo_resposta * 1000);
 }
 
+// Trata a resposta do usuário
 function handleAnswer(resposta) {
-    clearTimeout(timer); // Cancela o tempo restante
+  clearTimeout(timer);
 
-    // Remove a barra de progresso ao responder
-    const progressBar = document.getElementById('progress');
-    progressBar.style.animation = 'none';
+  const progressBar = document.getElementById('progress');
+  progressBar.style.animation = 'none';
 
-    if (resposta.correta) {
-        alert("✅ Resposta correta!");
-        pontos++;
-        acertos++;
-    } else {
-        alert("❌ Resposta errada!");
-        pontos = Math.max(0, pontos - 1);
-        erros++;
-    }
+  if (resposta.correta) {
+    alert("✅ Resposta correta!");
+    pontos++;
+    acertos++;
+  } else {
+    alert("❌ Resposta errada!");
+    pontos = Math.max(0, pontos - 1);
+    erros++;
+  }
 
-    // Desabilita os botões de resposta após uma escolha
-    document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = true);
-    document.getElementById('next-btn').classList.remove('hidden');
+  document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = true);
+  document.getElementById('next-btn').classList.remove('hidden');
 }
 
+// Avança para a próxima pergunta ou mostra o resultado final
 function nextQuestion() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
-        showQuestion();
-    } else {
-        showResults();
-    }
+  currentQuestionIndex++;
+  if (currentQuestionIndex < questions.length) {
+    showQuestion();
+  } else {
+    showResults();
+  }
 }
 
+// Mostra a tela de resultados
 function showResults() {
-    document.getElementById('quiz-screen').classList.add('hidden');
-    document.getElementById('result-screen').classList.remove('hidden');
+  document.getElementById('quiz-screen').classList.add('hidden');
+  document.getElementById('result-screen').classList.remove('hidden');
 
-    document.getElementById('final-score').innerHTML = `
-        Pontuação: <span class="highlight">${pontos}</span><br>
-        Acertos: <span class="highlight">${acertos}</span> | 
-        Erros: <span class="highlight">${erros}</span>
-    `;
+  document.getElementById('final-score').innerHTML = `
+    Pontuação: <span class="highlight">${pontos}</span><br>
+    Acertos: <span class="highlight">${acertos}</span> | 
+    Erros: <span class="highlight">${erros}</span>
+  `;
 }
 
+// Reseta o quiz
 function resetQuiz() {
-    currentQuestionIndex = 0;
-    pontos = 0;
-    acertos = 0;
-    erros = 0;
+  currentQuestionIndex = 0;
+  pontos = 0;
+  acertos = 0;
+  erros = 0;
 
-    document.getElementById('result-screen').classList.add('hidden');
-    document.getElementById('start-screen').classList.remove('hidden');
+  document.getElementById('result-screen').classList.add('hidden');
+  document.getElementById('start-screen').classList.remove('hidden');
 }
