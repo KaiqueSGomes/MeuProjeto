@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const pool = require('./dataBase/db')
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,6 +11,23 @@ const port = process.env.PORT || 3000;
 app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
+
+// Rota para fazer o post dos dados do usuário
+app.post('/cadastro', (req, res) => {
+  const { nome, email } = req.body;
+
+  const sql = 'INSERT INTO jogadores (nome, email) VALUES (?, ?)';
+  conexao.query(sql, [nome, email], (erro, resultado) => {
+    if (erro) {
+      console.error('Erro ao cadastrar usuário:', erro);
+      return res.status(500).send('Erro ao cadastrar');
+    }
+
+    res.send('Usuário cadastrado com sucesso!');
+  });
+});
+
+
 
 
 // Rota para buscar perguntas e respostas
