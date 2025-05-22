@@ -137,22 +137,30 @@ function showQuestion() {
 // Trata a resposta do usuário
 function handleAnswer(resposta) {
   clearTimeout(timer);
-
   const progressBar = document.getElementById('progress');
   progressBar.style.animation = 'none';
 
   if (resposta.correta) {
-    
     pontuacao++;
     acertos++;
   } else {
-   
     erros++;
   }
 
   document.querySelectorAll('.answer-btn').forEach(btn => btn.disabled = true);
-  document.getElementById('next-btn').classList.remove('hidden');
+  document.getElementById('next-btn').classList.add('hidden'); // Oculta o botão "Próxima"
+
+  //tempo pra passar de pergunta sozinho
+  setTimeout(() => {
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showQuestion();
+    } else {
+      showResults();
+    }
+  }, 500);
 }
+
 
 // Avança para a próxima pergunta ou mostra o resultado final
 function nextQuestion() {
@@ -164,7 +172,7 @@ function nextQuestion() {
   }
 }
 
-// Mostra a tela de resultados
+// tela de resultados
 function showResults() {
   document.getElementById('quiz-screen').classList.add('hidden');
   document.getElementById('result-screen').classList.remove('hidden');
@@ -182,7 +190,7 @@ function showResults() {
 
 async function showRanking(jogador_id_global, pontuacao) {
   try {
-    // Envia a pontuação (POST)
+    // envia a pontuação (POST)
     const response = await fetch(`${baseURL}/ranking`, {
       method: 'POST',
       headers: {
@@ -198,7 +206,7 @@ async function showRanking(jogador_id_global, pontuacao) {
       throw new Error(`Erro ao enviar ranking! status: ${response.status}`);
     }
 
-    // Depois busca o ranking atualizado (GET)
+    // busca o ranking atualizado (GET)
     const res = await fetch(`${baseURL}/ranking`);
     const data = await res.json();
 
@@ -217,7 +225,7 @@ async function showRanking(jogador_id_global, pontuacao) {
       rankingBox.appendChild(list);
     }
 
-    // Exibe a tela de ranking
+    // exibe a tela de ranking
     document.getElementById('result-screen').classList.add('hidden');
     document.getElementById('ranking-screen').classList.remove('hidden');
 
