@@ -1,0 +1,996 @@
+CREATE DATABASE dbQuizPex;
+use dbQuizPex;
+drop database dbQuizPex;
+
+CREATE TABLE temas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tema VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE niveis (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nivel VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE perguntas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    enunciado VARCHAR(255) NOT NULL,
+    tempo_resposta INT NOT NULL,
+    nivel_id INT NOT NULL,
+    tema_id INT NOT NULL,
+    FOREIGN KEY (nivel_id) REFERENCES niveis(id),
+    FOREIGN KEY (tema_id) REFERENCES temas(id)
+);
+
+CREATE TABLE respostas (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    resposta VARCHAR(255) NOT NULL,
+    correta BOOLEAN NOT NULL,
+    pergunta_id INT,
+    FOREIGN KEY (pergunta_id) REFERENCES perguntas(id)
+);
+
+CREATE TABLE jogadores (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    data_nascimento DATE,
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE ranking (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    jogador_id INT,
+    pontuacao INT NOT NULL,
+    data_partida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (jogador_id) REFERENCES jogadores(id)
+);
+
+CREATE TABLE turmas (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    turma varchar(255),
+    sala int
+);
+
+CREATE TABLE feedback (
+	id INT PRIMARY KEY auto_increment,
+    feedback varchar(255),
+    jogador_id INT,
+    turma_id INT,
+	FOREIGN KEY (jogador_id) REFERENCES jogadores(id),
+    FOREIGN KEY (turma_id) REFERENCES turmas(id)
+);
+
+INSERT INTO niveis (nivel) VALUES
+('Fácil'),
+('Médio'),
+('Difícil');
+
+INSERT INTO turmas (turma, sala) VALUES
+('Análise e Desenvolvimento de Sistemas', 7),
+('Gestão da	Tecnologia da Informação', 7),
+('Ciências Contábeis', 19),
+('Administração', 19),
+('Logística', 15),
+('Ed. Física', 5),
+('Ed. Física', 6),
+('Direito', 4),
+('Direito', 14),
+('Direito', 16),
+('Direito', 12);
+
+INSERT INTO temas (tema) VALUES
+('Segurança da Internet'), -- 1
+('Informática Básica'), -- 2
+('Inteligência Artificial'), -- 3
+('História da Tecnologia'), -- 4
+('Mídias Sociais'); -- 5
+
+INSERT INTO perguntas (nivel_id, enunciado, tempo_resposta, tema_id) VALUES
+(1, 'O que significa a sigla HTML?', 30, 1),
+(1, 'Qual ferramenta ajuda a detectar vírus no computador?', 30, 1),
+(1, 'Por que evitar redes Wi-Fi públicas?', 30, 1),
+(1, 'O que é phishing?', 30, 1),
+(1, 'Qual atitude ajuda a manter a segurança online?', 30, 1),
+(1, 'O que é um sistema operacional?', 30, 2),
+(1, 'Qual é a principal função do antivírus?', 30, 2),
+(1, 'O que é um firewall?', 30, 2),
+(1, 'O que significa a sigla VPN?', 30, 2),
+(1, 'Por que é importante manter os softwares atualizados?', 30, 2),
+(1, 'O que é malware?', 30, 2),
+(1, 'O que é uma rede social?', 30, 2),
+(1, 'O que é um vírus de computador?', 30, 2),
+(1, 'O que é um spyware?', 30, 2),
+(1, 'Qual é a função de um navegador de internet?', 30, 2),
+(1, 'O que é a nuvem?', 30, 1),
+(1, 'Como funciona a criptografia?', 30, 1),
+(1, 'O que é um ataque DDoS?', 30, 1),
+(1, 'O que significa a sigla URL?', 30, 1),
+(1, 'O que é um link?', 30, 1),
+(1, 'Qual a diferença entre hardware e software?', 30, 1),
+(1, 'O que é um backup?', 30, 1),
+(1, 'O que significa a sigla RAM?', 30, 1),
+(1, 'O que é o Wi-Fi?', 30, 1),
+(1, 'Como proteger sua senha?', 30, 1),
+(1, 'O que é a proteção contra ransomware?', 30, 1),
+(1, 'O que é um arquivo comprimido?', 30, 1),
+(1, 'O que é a autenticação em duas etapas?', 30, 1),
+(1, 'O que é a criptografia de ponta a ponta?', 30, 1),
+(1, 'O que é o phishing por SMS?', 30, 1),
+(1, 'O que é a privacidade online?', 30, 1),
+(1, 'O que significa HTTPS?', 30, 1),
+(1, 'O que é um pop-up?', 30, 1),
+(1, 'Como identificar e-mails falsos?', 30, 1),
+(1, 'O que são cookies em um site?', 30, 1),
+(1, 'Qual a diferença entre HTTP e HTTPS?', 30, 1),
+(1, 'O que é um vírus de e-mail?', 30, 1),
+(1, 'O que é um trojan?', 30, 1),
+(1, 'O que é um bot?', 30, 1),
+(1, 'O que é um ataque Man-in-the-Middle?', 30, 1),
+(1, 'O que significa a sigla DNS?', 30, 1),
+(1, 'Como se protege contra ataques de engenharia social?', 30, 1),
+(1, 'O que é o conceito de “segurança em profundidade”?', 30, 1),
+(1, 'Por que usar senhas fortes?', 30, 1),
+(1, 'Qual a diferença entre vírus e worm?', 30, 1),
+(1, 'O que é a segurança por obfuscação?', 30, 1),
+(1, 'O que é uma chave pública na criptografia?', 30, 1),
+(1, 'O que é um vírus de e-mail?', 30, 1),
+(1, 'O que é um trojan?', 30, 1),
+(1, 'O que é um bot?', 30, 1);
+
+INSERT INTO perguntas (nivel_id, enunciado, tempo_resposta, tema_id) VALUES
+(2, 'O que é autenticação de dois fatores (2FA)?', 10, 1),
+(2, 'O que é phishing?', 10, 1),
+(2, 'Qual medida ajuda a proteger seus dados em redes públicas?', 10, 1),
+(2, 'Um site seguro geralmente começa com:', 10, 1),
+(2, 'O que é um malware?', 10, 1),
+(2, 'O que é um firewall?', 10, 1),
+(2, 'O que significa a sigla VPN?', 10, 1),
+(2, 'O que é um ataque DDoS?', 10, 1),
+(2, 'O que significa “criar uma senha forte”?', 10, 1),
+(2, 'O que é um vírus informático?', 10, 1),
+(2, 'Qual a principal função da memória RAM?', 10, 2),
+(2, 'O que é o “Painel de Controle” no Windows?', 10, 2),
+(2, 'Para que serve o Gerenciador de Tarefas?', 10, 2),
+(2, 'O que é um driver?', 10, 2),
+(2, 'Qual a função do “Windows Update”?', 10, 2),
+(2, 'O que é um software?', 10, 2),
+(2, 'O que é a “Área de Transferência” (clipboard)?', 10, 2),
+(2, 'Qual é a principal função de um navegador de internet?', 10, 2),
+(2, 'Qual das opções a seguir representa corretamente a função do sistema operacional em um computador?', 10, 2),
+(2, 'Em relação ao armazenamento de dados, qual das alternativas abaixo apresenta uma diferença correta entre o HD (disco rígido) e a memória RAM?', 10, 2),
+(2, 'O que é um chatbot?', 10, 3),
+(2, 'IA é aplicada em qual das opções abaixo?', 10, 3),
+(2, 'Qual a função do machine learning?', 10, 3),
+(2, 'O que é uma rede neural artificial?', 10, 3),
+(2, 'Qual dessas profissões pode ser impactada pela IA?', 10, 3),
+(2, 'Qual é um exemplo de assistente virtual que usa Inteligência Artificial?', 10, 3),
+(2, 'Qual linguagem de programação é comumente usada no desenvolvimento de IA?', 10, 3),
+(2, 'O que é necessário para treinar um modelo de IA?', 10, 3),
+(2, 'Em qual área a IA é usada para ajudar na detecção precoce de doenças?', 10, 3),
+(2, 'Qual das alternativas melhor descreve o termo “algoritmo” no contexto da IA?', 10, 3),
+(2, 'O que foi o ENIAC?', 10, 4),
+(2, 'Qual empresa lançou o primeiro iPhone?', 10, 4),
+(2, 'Quem inventou a linguagem de programação BASIC?', 10, 4),
+(2, 'Qual inovação é atribuída à Xerox PARC?', 10, 4),
+(2, 'O que representou a chegada da internet comercial nos anos 90?', 10, 4),
+(2, 'Quem inventou a World Wide Web (WWW)?', 10, 4),
+(2, 'O que foi a ARPANET, criada nos anos 1960?', 10, 4),
+(2, 'Qual destes dispositivos revolucionou o armazenamento portátil nos anos 2000?', 10, 4),
+(2, 'Qual foi a principal contribuição de Ada Lovelace para a tecnologia?', 10, 4),
+(2, 'Qual inovação tecnológica dos anos 1970 permitiu a criação dos primeiros computadores pessoais?', 10, 4),
+(2, 'O que significa “engajamento” em mídias sociais?', 10, 5),
+(2, 'Qual dessas redes sociais é conhecida por fotos e vídeos curtos?', 10, 5),
+(2, 'O que é o algoritmo de uma rede social?', 10, 5),
+(2, 'O que significa “shadowban” no contexto de mídias sociais?', 10, 5),
+(2, 'O que caracteriza o termo “viralizar” em uma rede social?', 10, 5),
+(2, 'Qual a principal função do LinkedIn entre as redes sociais?', 10, 5),
+(2, 'O que é um “reels” no Instagram?', 10, 5),
+(2, 'Para que servem as hashtags (#) em postagens nas redes sociais?', 10, 5),
+(2, 'O que é um “feed” em uma rede social como Instagram ou Facebook?', 10, 5),
+(2, 'O que significa “DM” nas redes sociais?', 10, 5);
+
+INSERT INTO perguntas (nivel_id, enunciado, tempo_resposta, tema_id) VALUES
+(3, 'O que é um ataque de “Man-in-the-Middle” (MITM)?', 30, 1),
+(3, 'O que é um ataque de DDoS (Distributed Denial of Service)?', 30, 1),
+(3, 'Qual a principal diferença entre HTTPS e HTTP?', 30, 1),
+(3, 'O que é uma vulnerabilidade zero-day?', 30, 1),
+(3, 'O que é o “spoofing”?', 30, 1),
+(3, 'Qual é a principal diferença entre spyware e ransomware?', 30, 1),
+(3, 'O que é social engineering (engenharia social) em segurança da informação?', 30, 1),
+(3, 'Qual das seguintes práticas não é considerada segura ao criar senhas?', 30, 1),
+(3, 'Qual é a finalidade da criptografia de ponta a ponta (end-to-end encryption)?', 30, 1),
+(3, 'Qual das opções abaixo é uma boa prática para evitar ataques de phishing?', 30, 1),
+(3, 'O que é o BIOS de um computador?', 30, 2),
+(3, 'O que é uma distribuição Linux?', 30, 2),
+(3, 'O que é um endereço IP?', 30, 2),
+(3, 'O que são macros no Excel?', 30, 2),
+(3, 'O que é a função “ÍNDICE” no Excel?', 30, 2),
+(3, 'Como aplicar um filtro em uma tabela do Excel?', 30, 2),
+(3, 'Como você adicionaria um gráfico de barras em um documento do Word?', 30, 2),
+(3, 'Qual a principal vantagem de um SSD sobre um HD?', 30, 2),
+(3, 'O que é overclocking em um processador?', 30, 2),
+(3, 'Qual é a principal função de uma unidade de estado sólido (SSD)?', 30, 2),
+(3, 'O que é um algoritmo genético na IA?', 30, 3),
+(3, 'O que significa “deep learning” na inteligência artificial?', 30, 3),
+(3, 'Qual é a principal diferença entre IA fraca e IA forte?', 30, 3),
+(3, 'O que é o processamento de linguagem natural (PLN)?', 30, 3),
+(3, 'O que é uma rede neural convolucional (CNN)?', 30, 3),
+(3, 'O que é um modelo de aprendizado supervisionado?', 30, 3),
+(3, 'Qual destas tarefas ainda não é considerada resolvida de forma robusta pela IA em escala comercial??', 30, 3),
+(3, 'Deepfake é uma técnica que:?', 30, 3),
+(3, 'Quando um carro autônomo “vê” um semáforo vermelho e decide parar, qual etapa de IA está sendo executada?', 30, 3),
+(3, 'Como a IA ajuda em plataformas de streaming como Netflix ou Spotify?', 30, 3),
+(3, 'Quem inventou o conceito de “computação universal”?', 30, 4),
+(3, 'O que foi o ENIAC (Electronic Numerical Integrator and Computer)?', 30, 4),
+(3, 'Qual foi o impacto do microprocessador nos computadores?', 30, 4),
+(3, 'Qual foi o papel da ARPANET na história da tecnologia', 30, 4),
+(3, 'Em que década o primeiro computador pessoal foi lançado', 30, 4),
+(3, 'O que é o “root” em um dispositivo Android?', 30, 4),
+(3, 'O que é o NFC (Near Field Communication) em dispositivos móveis?', 30, 4),
+(3, 'O que é a função “Find My iPhone”?', 30, 4),
+(3, 'O que é um “chipset” em um dispositivo móvel?', 30, 4),
+(3, 'Qual é a diferença entre os sistemas operacionais Android e iOS?', 30, 4),
+(3, 'O que é o algoritmo de uma rede social?', 30, 5),
+(3, 'O que é o “shadowban” em uma rede social?', 30, 5),
+(3, 'O que significa o termo “engajamento” em mídias sociais?', 30, 5),
+(3, 'O que é o “Marketing de Influência”?', 30, 5),
+(3, 'O que é um “hashtag” em plataformas como Instagram e Twitter?', 30, 5),
+(3, 'O que significa o termo “influenciador digital”?', 30, 5),
+(3, 'Qual é um dos maiores desafios enfrentados por algoritmos de recomendação em mídias sociais?', 30, 5),
+(3, 'O que é o "engajamento fantasma" (shadow engagement) em plataformas sociais?', 30, 5),
+(3, 'O que caracteriza o chamado “conteúdo viral”?', 30, 5),
+(3, 'O termo “FAKE NEWS” em redes sociais se refere a:', 30, 5);
+
+INSERT INTO respostas (pergunta_id, resposta, correta) VALUES
+(1, 'Linguagem de Marcação de Hipertexto', TRUE),
+(1, 'Linguagem de Programação', FALSE),
+(1, 'Editor de Texto', FALSE),
+(1, 'Sistema Operacional', FALSE),
+
+(2, 'Antivírus', TRUE),
+(2, 'Editor de texto', FALSE),
+(2, 'Navegador de internet', FALSE),
+(2, 'Gerenciador de arquivos', FALSE),
+
+(3, 'Porque pode ser uma ameaça à segurança dos dados', TRUE),
+(3, 'Porque a internet é lenta', FALSE),
+(3, 'Porque o Wi-Fi é caro', FALSE),
+(3, 'Porque não há senha', FALSE),
+
+(4, 'É uma tentativa de enganar pessoas para obter informações confidenciais', TRUE),
+(4, 'É um tipo de vírus', FALSE),
+(4, 'É uma ferramenta de segurança', FALSE),
+(4, 'É um protocolo de internet', FALSE),
+
+(5, 'Usar senhas fortes e não compartilhar informações pessoais', TRUE),
+(5, 'Navegar apenas em sites conhecidos', FALSE),
+(5, 'Desabilitar o firewall', FALSE),
+(5, 'Desconectar-se da internet', FALSE),
+
+(6, 'É o software que gerencia os recursos de hardware e software do computador', TRUE),
+(6, 'É um programa de edição de texto', FALSE),
+(6, 'É um tipo de navegador de internet', FALSE),
+(6, 'É uma ferramenta de design gráfico', FALSE),
+
+(7, 'Detectar e remover vírus do computador', TRUE),
+(7, 'Ajudar a criar sites', FALSE),
+(7, 'Aumentar a velocidade da internet', FALSE),
+(7, 'Gerenciar arquivos no computador', FALSE),
+
+(8, 'Controlar o tráfego de rede e proteger contra acessos não autorizados', TRUE),
+(8, 'Ajudar a melhorar a performance do computador', FALSE),
+(8, 'Aumentar a velocidade da conexão de internet', FALSE),
+(8, 'Salvar arquivos no computador', FALSE),
+
+(9, 'Virtual Private Network', TRUE),
+(9, 'Very Private Network', FALSE),
+(9, 'Virtual Personal Network', FALSE),
+(9, 'Variable Private Network', FALSE),
+
+(10, 'Evita vulnerabilidades que podem ser exploradas por atacantes', TRUE),
+(10, 'Deixa o computador mais rápido', FALSE),
+(10, 'Melhora a conexão Wi-Fi', FALSE),
+(10, 'Facilita o download de arquivos', FALSE),
+
+(11, 'Programa que prejudica o funcionamento do computador', TRUE),
+(11, 'Programa que acelera a internet', FALSE),
+(11, 'Programa que organiza arquivos', FALSE),
+(11, 'Programa que melhora a performance gráfica', FALSE),
+
+(12, 'Plataforma para interagir com outras pessoas e compartilhar conteúdo', TRUE),
+(12, 'Ferramenta para editar imagens', FALSE),
+(12, 'Aplicativo para fazer compras', FALSE),
+(12, 'Aplicativo para criar sites', FALSE),
+
+(13, 'Software que se replica e pode danificar o computador', TRUE),
+(13, 'Software para fazer backup de dados', FALSE),
+(13, 'Software de navegação na internet', FALSE),
+(13, 'Software de design gráfico', FALSE),
+
+(14, 'Programa que monitora e coleta dados sem o conhecimento do usuário', TRUE),
+(14, 'Ferramenta de edição de vídeos', FALSE),
+(14, 'Aplicativo para melhorar a segurança da rede', FALSE),
+(14, 'Sistema para proteger a privacidade online', FALSE),
+
+(15, 'Programa usado para acessar sites na internet', TRUE),
+(15, 'Software de criação de documentos', FALSE),
+(15, 'Software de edição de imagens', FALSE),
+(15, 'Aplicativo de redes sociais', FALSE),
+
+(16, 'Serviço de armazenamento de dados online', TRUE),
+(16, 'Plataforma para vender produtos', FALSE),
+(16, 'Programa para otimizar a memória RAM', FALSE),
+(16, 'Aplicativo para editar fotos', FALSE),
+
+(17, 'Transformação de dados em um formato codificado para proteção', TRUE),
+(17, 'Armazenamento de dados em servidores externos', FALSE),
+(17, 'Compressão de dados para enviar mais rápido', FALSE),
+(17, 'Ferramenta de edição de texto', FALSE),
+
+(18, 'Distributed Denial of Service', TRUE),
+(18, 'Direct Digital Online Service', FALSE),
+(18, 'Digital Data Online Security', FALSE),
+(18, 'Direct Data Online Security', FALSE),
+
+(19, 'Uniform Resource Locator', TRUE),
+(19, 'Universal Reference Link', FALSE),
+(19, 'Universal Resource Location', FALSE),
+(19, 'Unified Resource List', FALSE),
+
+(20, 'Um endereço que leva a uma página na internet', TRUE),
+(20, 'Um tipo de vírus', FALSE),
+(20, 'Um software de segurança', FALSE),
+(20, 'Um dispositivo eletrônico', FALSE),
+
+(21, 'Hardware é a parte física e software é a parte lógica', TRUE),
+(21, 'Hardware é mais barato que software', FALSE),
+(21, 'Software é a carcaça do computador', FALSE),
+(21, 'Hardware é o sistema operacional', FALSE),
+
+(22, 'Cópia de segurança dos dados', TRUE),
+(22, 'Sistema operacional alternativo', FALSE),
+(22, 'Editor de planilhas', FALSE),
+(22, 'Antivírus portátil', FALSE),
+
+(23, 'Memória de Acesso Aleatório', TRUE),
+(23, 'Rede de Acesso Manual', FALSE),
+(23, 'Módulo de Arquivamento Rápido', FALSE),
+(23, 'Memória de Apoio à Máquina', FALSE),
+
+(24, 'Tecnologia sem fio para conexão de dispositivos', TRUE),
+(24, 'Nome de um sistema operacional', FALSE),
+(24, 'Dispositivo de segurança', FALSE),
+(24, 'Tipo de antivírus', FALSE),
+
+(25, 'Criando senhas fortes e únicas', TRUE),
+(25, 'Escrevendo senhas em papel', FALSE),
+(25, 'Usando senhas curtas', FALSE),
+(25, 'Utilizando datas de nascimento como senha', FALSE),
+
+(26, 'Bloqueia acesso a arquivos importantes exigindo pagamento', TRUE),
+(26, 'Acelera o desempenho da internet', FALSE),
+(26, 'Desinstala programas maliciosos automaticamente', FALSE),
+(26, 'Aumenta a velocidade de download', FALSE),
+
+(27, 'Arquivo reduzido para ocupar menos espaço', TRUE),
+(27, 'Arquivo duplicado', FALSE),
+(27, 'Arquivo corrompido', FALSE),
+(27, 'Arquivo de vírus', FALSE),
+
+(28, 'Confirmação com dois fatores de identificação', TRUE),
+(28, 'Sistema para atualizar senhas automaticamente', FALSE),
+(28, 'Ferramenta de criptografia de rede', FALSE),
+(28, 'Editor de permissões de arquivos', FALSE),
+
+(29, 'Protege mensagens durante todo o trajeto entre remetente e destinatário', TRUE),
+(29, 'Aumenta o tamanho dos arquivos', FALSE),
+(29, 'Remove vírus automaticamente', FALSE),
+(29, 'Impede o uso da internet', FALSE),
+
+(30, 'É uma forma de enganar usuários por mensagens de texto', TRUE),
+(30, 'É um tipo de atualização de software', FALSE),
+(30, 'É um erro no sistema operacional', FALSE),
+(30, 'É uma ferramenta de edição de mensagens', FALSE),
+
+(31, 'Capacidade de controlar e limitar o que é compartilhado online', TRUE),
+(31, 'Desconexão total da internet', FALSE),
+(31, 'Uso de múltiplos dispositivos', FALSE),
+(31, 'Abertura de todas as informações para o público', FALSE),
+
+(32, 'HyperText Transfer Protocol Secure', TRUE),
+(32, 'High Transfer Text Standard', FALSE),
+(32, 'Hyper Tool for Technical Safety', FALSE),
+(32, 'High-level Text Protocol', FALSE),
+
+(33, 'Janela que aparece automaticamente em um site', TRUE),
+(33, 'Erro do sistema', FALSE),
+(33, 'Tipo de vírus', FALSE),
+(33, 'Software de edição de texto', FALSE),
+
+(34, 'Verificando remetente e links suspeitos', TRUE),
+(34, 'Clicando em todos os links recebidos', FALSE),
+(34, 'Ignorando e-mails do trabalho', FALSE),
+(34, 'Reenviando e-mails duvidosos para amigos', FALSE),
+
+(35, 'Pequenos arquivos que armazenam informações do usuário', TRUE),
+(35, 'Vídeos automáticos', FALSE),
+(35, 'Imagens de fundo do site', FALSE),
+(35, 'Erros de programação', FALSE),
+
+(36, 'HTTPS é seguro, HTTP não possui criptografia', TRUE),
+(36, 'Não há diferença', FALSE),
+(36, 'HTTP é mais rápido', FALSE),
+(36, 'HTTPS é usado apenas por bancos', FALSE),
+
+(37, 'Vírus enviado por meio de e-mails falsos', TRUE),
+(37, 'Programa de segurança digital', FALSE),
+(37, 'Atualização automática de antivírus', FALSE),
+(37, 'Tipo de criptografia', FALSE),
+
+(38, 'Programa disfarçado que executa ações maliciosas', TRUE),
+(38, 'Ferramenta para limpar o computador', FALSE),
+(38, 'Antivírus gratuito', FALSE),
+(38, 'Extensão de navegador', FALSE),
+
+(39, 'Programa automatizado que executa tarefas repetitivas', TRUE),
+(39, 'Computador antigo', FALSE),
+(39, 'Erro no sistema', FALSE),
+(39, 'Aplicativo de mensagens', FALSE),
+
+(40, 'Interceptação de dados entre dois pontos de comunicação', TRUE),
+(40, 'Erro ao instalar antivírus', FALSE),
+(40, 'Atualização de navegador', FALSE),
+(40, 'Envio de e-mails com anexos grandes', FALSE),
+
+(41, 'Domain Name System', TRUE),
+(41, 'Data Network System', FALSE),
+(41, 'Device Node Service', FALSE),
+(41, 'Digital Network Standard', FALSE),
+
+(42, 'Desconfiando de contatos que pedem dados pessoais', TRUE),
+(42, 'Ignorando atualizações de software', FALSE),
+(42, 'Desativando o antivírus', FALSE),
+(42, 'Clicando em links desconhecidos', FALSE),
+
+(43, 'Várias camadas de defesa para proteger sistemas', TRUE),
+(43, 'Senha com mais de 10 caracteres', FALSE),
+(43, 'Rede Wi-Fi mais rápida', FALSE),
+(43, 'Desconexão frequente da internet', FALSE),
+
+(44, 'Elas são difíceis de adivinhar e reduzem riscos', TRUE),
+(44, 'Facilitam lembrar datas importantes', FALSE),
+(44, 'Tornam o computador mais rápido', FALSE),
+(44, 'Permitem compartilhar com amigos', FALSE),
+
+(45, 'Vírus precisa de ação do usuário, worm se propaga sozinho', TRUE),
+(45, 'Worms são mais lentos', FALSE),
+(45, 'Vírus só afeta internet', FALSE),
+(45, 'Worms não existem mais', FALSE),
+
+(46, 'Ocultar detalhes técnicos para dificultar ataques', TRUE),
+(46, 'Proteger com firewall', FALSE),
+(46, 'Usar antivírus gratuito', FALSE),
+(46, 'Desligar o Wi-Fi', FALSE),
+
+(47, 'Código público usado para criptografar dados', TRUE),
+(47, 'Chave para acessar redes Wi-Fi', FALSE),
+(47, 'Senha de administrador', FALSE),
+(47, 'Identificador de usuário', FALSE),
+
+(48, 'Dispositivo que conecta redes diferentes e encaminha dados', TRUE),
+(48, 'Aplicativo de edição de vídeos', FALSE),
+(48, 'Antivírus portátil', FALSE),
+(48, 'Disco rígido externo', FALSE),
+
+(49, 'Técnica de roubo de informações usando chamadas telefônicas', TRUE),
+(49, 'Erro no sistema de login', FALSE),
+(49, 'Bug em aplicativos de mensagem', FALSE),
+(49, 'Método de autenticação', FALSE),
+
+(50, 'Conjunto de regras e ferramentas que garantem segurança digital', TRUE),
+(50, 'Aplicativo de criptografia', FALSE),
+(50, 'Antivírus instalado em servidores', FALSE),
+(50, 'Extensão de navegador segura', FALSE),
+
+(51, 'Usar apenas uma senha forte', FALSE),
+(51, 'Verificação com senha e outro método de segurança', TRUE),
+(51, 'Navegar em modo anônimo', FALSE),
+(51, 'Ter dois antivírus instalados', FALSE),
+
+(52, 'Técnica de backup automático', FALSE),
+(52, 'Golpe que tenta roubar informações pessoais fingindo ser confiável', TRUE),
+(52, 'Proteção de firewall', FALSE),
+(52, 'Tipo de antivírus', FALSE),
+
+(53, 'Usar rede sem senha', FALSE),
+(53, 'Baixar arquivos aleatórios', FALSE),
+(53, 'Utilizar uma VPN', TRUE),
+(53, 'Compartilhar Wi-Fi com todos', FALSE),
+
+(54, 'www://', FALSE),
+(54, 'https://', TRUE),
+(54, 'file://', FALSE),
+(54, 'ftp://', FALSE),
+
+(55, 'Um componente de hardware', FALSE),
+(55, 'Um software malicioso que causa danos', TRUE),
+(55, 'Um tipo de e-mail', FALSE),
+(55, 'Um navegador antigo', FALSE),
+
+(56, 'Sistema que controla o tráfego de dados em uma rede, bloqueando acessos não autorizados', TRUE),
+(56, 'Uma ferramenta para organizar arquivos', FALSE),
+(56, 'Um programa de antivírus', FALSE),
+(56, 'Um tipo de criptografia de dados', FALSE),
+
+(57, 'Vírus Protocolo de Navegação', FALSE),
+(57, 'Variação de Rede Privada', FALSE),
+(57, 'Rede Privada Virtual', TRUE),
+(57, 'Virtual Personal Network', FALSE),
+
+(58, 'Ataque que tenta acessar dados pessoais', FALSE),
+(58, 'Ataque de negação de serviço distribuído, sobrecarregando o servidor', TRUE),
+(58, 'Ataque focado em roubo de senhas', FALSE),
+(58, 'Ataque que envolve a instalação de software malicioso', FALSE),
+
+(59, 'Usar apenas números', FALSE),
+(59, 'Usar uma combinação de letras, números e símbolos', TRUE),
+(59, 'Criar senhas fáceis de lembrar', FALSE),
+(59, 'Usar a mesma senha para todas as contas', FALSE),
+
+(60, 'Um sistema de proteção de dados', FALSE),
+(60, 'Software malicioso que se propaga e danifica o sistema', TRUE),
+(60, 'Programa de backup', FALSE),
+(60, 'Interface de usuário', FALSE),
+
+(61, 'Armazenar arquivos permanentemente', FALSE),
+(61, 'Controlar o mouse', FALSE),
+(61, 'Guardar dados temporariamente para acesso rápido', TRUE),
+(61, 'Proteger contra vírus', FALSE),
+
+(62, 'Programa para escrever textos', FALSE),
+(62, 'Área para alterar configurações do sistema', TRUE),
+(62, 'Gerenciador de senhas', FALSE),
+(62, 'Barra de jogos', FALSE),
+
+(63, 'Desinstalar programas', FALSE),
+(63, 'Monitorar e encerrar processos ativos', TRUE),
+(63, 'Aumentar o volume', FALSE),
+(63, 'Conectar à internet', FALSE),
+
+(64, 'Um programa de antivírus', FALSE),
+(64, 'Software que permite o funcionamento de hardware específico', TRUE),
+(64, 'Navegador de internet', FALSE),
+(64, 'Comando para reiniciar o computador', FALSE),
+
+(65, 'Instalar jogos', FALSE),
+(65, 'Atualizar o sistema operacional', TRUE),
+(65, 'Apagar documentos antigos', FALSE),
+(65, 'Criar senhas automáticas', FALSE),
+
+(66, 'Programa que executa uma tarefa no computador', TRUE),
+(66, 'Parte física do computador', FALSE),
+(66, 'Sistema de energia', FALSE),
+(66, 'Conjunto de cabos conectando os dispositivos', FALSE),
+
+(67, 'Memória temporária usada para armazenar dados na internet', FALSE),
+(67, 'Local onde ficam os itens copiados ou cortados até serem colados', TRUE),
+(67, 'Local onde o sistema operacional armazena arquivos temporários', FALSE),
+(67, 'Ferramenta para fazer backup de documentos', FALSE),
+
+(68, 'Permitir o acesso e navegação na web', TRUE),
+(68, 'Criar gráficos e planilhas', FALSE),
+(68, 'Proteger o computador contra vírus', FALSE),
+(68, 'Armazenar grandes volumes de dados', FALSE),
+
+(69, 'Executar cálculos matemáticos complexos de forma automática', FALSE),
+(69, 'Proteger o computador contra vírus e outras ameaças', FALSE),
+(69, 'Controlar o hardware e permitir a interação entre o usuário e o computador', TRUE),
+(69, 'Converter linguagens de programação em linguagem de máquina', FALSE),
+
+(70, 'A RAM é usada para armazenar dados permanentemente, enquanto o HD é temporário', FALSE),
+(70, 'O HD é mais rápido que a RAM, mas tem menor capacidade', FALSE),
+(70, 'A RAM perde os dados quando o computador é desligado, enquanto o HD mantém os dados armazenados', TRUE),
+(70, 'Ambos armazenam dados da mesma forma e possuem a mesma função', FALSE),
+
+(71, 'Computador portátil antigo', FALSE),
+(71, 'Programa que simula uma conversa com humanos', TRUE),
+(71, 'Sistema de backup automático', FALSE),
+(71, 'Planilha com comandos pré-definidos', FALSE),
+
+(72, 'Canetas digitais', FALSE),
+(72, 'Reconhecimento facial em celulares', TRUE),
+(72, 'Códigos QR', FALSE),
+(72, 'Cartuchos de tinta', FALSE),
+
+(73, 'Substituir o processador', FALSE),
+(73, 'Ensinar a IA a aprender com dados', TRUE),
+(73, 'Traduzir imagens', FALSE),
+(73, 'Criar músicas automaticamente', FALSE),
+
+(74, 'Uma rede de computadores de alta velocidade', FALSE),
+(74, 'Estrutura de IA inspirada no cérebro humano', TRUE),
+(74, 'Servidor de banco de dados', FALSE),
+(74, 'Nome técnico de cabos de rede', FALSE),
+
+(75, 'Professor de matemática', FALSE),
+(75, 'Todas as profissões podem ser afetadas', TRUE),
+(75, 'Motorista de ônibus apenas', FALSE),
+(75, 'Agricultor exclusivamente', FALSE),
+
+(76, 'Windows Media Player', FALSE),
+(76, 'Google Assistente', TRUE),
+(76, 'Paint', FALSE),
+(76, 'WinRAR', FALSE),
+
+(77, 'HTML', FALSE),
+(77, 'Python', TRUE),
+(77, 'CSS', FALSE),
+(77, 'SQL', FALSE),
+
+(78, 'Somente um bom antivírus', FALSE),
+(78, 'Dados de qualidade', TRUE),
+(78, 'Conexão com impressoras', FALSE),
+(78, 'Formatação do disco rígido', FALSE),
+
+(79, 'Engenharia Civil', FALSE),
+(79, 'Medicina', TRUE),
+(79, 'Design Gráfico', FALSE),
+(79, 'Logística de transportes', FALSE),
+
+(80, 'Um tipo de vírus de computador', FALSE),
+(80, 'Um conjunto de instruções para resolver problemas', TRUE),
+(80, 'Um componente de hardware', FALSE),
+(80, 'Um sistema operacional', FALSE),
+
+(81, 'Um smartphone pioneiro', FALSE),
+(81, 'Primeiro computador eletrônico de grande escala', TRUE),
+(81, 'Navegador de internet', FALSE),
+(81, 'Impressora matricial', FALSE),
+
+(82, 'Microsoft', FALSE),
+(82, 'Apple', TRUE),
+(82, 'IBM', FALSE),
+(82, 'Google', FALSE),
+
+(83, 'Alan Turing', FALSE),
+(83, 'John Kemeny e Thomas Kurtz', TRUE),
+(83, 'Tim Berners-Lee', FALSE),
+(83, 'Charles Babbage', FALSE),
+
+(84, 'Impressora colorida', FALSE),
+(84, 'Computador pessoal', FALSE),
+(84, 'Interface gráfica com mouse', TRUE),
+(84, 'Disquete magnético', FALSE),
+
+(85, 'Criação de antivírus modernos', FALSE),
+(85, 'Expansão de redes privadas', FALSE),
+(85, 'Acesso público à internet em larga escala', TRUE),
+(85, 'Fim do uso de computadores', FALSE),
+
+(86, 'Steve Jobs', FALSE),
+(86, 'Bill Gates', FALSE),
+(86, 'Tim Berners-Lee', TRUE),
+(86, 'Dennis Ritchie', FALSE),
+
+(87, 'Um satélite de comunicação', FALSE),
+(87, 'Um sistema operacional para supercomputadores', FALSE),
+(87, 'A rede precursora da internet moderna', TRUE),
+(87, 'Um banco de dados militar', FALSE),
+
+(88, 'CD-ROM', FALSE),
+(88, 'Pendrive', TRUE),
+(88, 'Disquete de 5¼ polegadas', FALSE),
+(88, 'Zip Drive', FALSE),
+
+(89, 'Desenvolvimento de hardwares industriais', FALSE),
+(89, 'Invenção da primeira interface gráfica', FALSE),
+(89, 'Criação do primeiro algoritmo para máquina analítica', TRUE),
+(89, 'Projeto de redes sem fio', FALSE),
+
+(90, 'Tela sensível ao toque', FALSE),
+(90, 'Disco rígido externo', FALSE),
+(90, 'Circuito integrado', TRUE),
+(90, 'Impressora a jato de tinta', FALSE),
+
+(91, 'Número de seguidores que um perfil tem', FALSE),
+(91, 'Interação com postagens, como curtidas, comentários e compartilhamentos', TRUE),
+(91, 'O número de mensagens privadas enviadas', FALSE),
+(91, 'O tempo que um usuário passa online', FALSE),
+
+(92, 'Facebook', FALSE),
+(92, 'Instagram', TRUE),
+(92, 'LinkedIn', FALSE),
+(92, 'Pinterest', FALSE),
+
+(93, 'Sistema que organiza o conteúdo com base no comportamento dos usuários', TRUE),
+(93, 'Conjunto de regras de privacidade de um perfil', FALSE),
+(93, 'Interface de navegação entre perfis', FALSE),
+(93, 'Ferramenta para criar conteúdos ao vivo', FALSE),
+
+(94, 'Banimento temporário de um usuário', FALSE),
+(94, 'Redução invisível do alcance do conteúdo sem aviso ao usuário', TRUE),
+(94, 'Bloqueio completo do perfil', FALSE),
+(94, 'Alteração de senha obrigatória', FALSE),
+
+(95, 'Quando um conteúdo se espalha rapidamente entre os usuários', TRUE),
+(95, 'Quando uma postagem é removida por violar regras', FALSE),
+(95, 'Quando alguém cria uma conta falsa', FALSE),
+(95, 'Quando o usuário compartilha conteúdo privado', FALSE),
+
+(96, 'Compartilhar vídeos curtos de humor', FALSE),
+(96, 'Criar álbuns de fotos familiares', FALSE),
+(96, 'Networking e oportunidades profissionais', TRUE),
+(96, 'Trocar mensagens criptografadas', FALSE),
+
+(97, 'Um tipo de filtro animado para fotos', FALSE),
+(97, 'Um vídeo curto e dinâmico para alcançar mais pessoas', TRUE),
+(97, 'Um grupo de mensagens privadas', FALSE),
+(97, 'Uma lista de seguidores recomendados', FALSE),
+
+(98, 'Marcar perfis de amigos', FALSE),
+(98, 'Adicionar emojis ocultos ao texto', FALSE),
+(98, 'Organizar e categorizar conteúdos para facilitar buscas', TRUE),
+(98, 'Esconder publicações do público geral', FALSE),
+
+(99, 'Página que mostra o histórico de curtidas do usuário', FALSE),
+(99, 'Área com as mensagens privadas', FALSE),
+(99, 'Sequência de postagens exibidas para o usuário', TRUE),
+(99, 'Lista de seguidores que foram bloqueados', FALSE),
+
+(100, 'Dados Móveis', FALSE),
+(100, 'Desempenho de Mídia', FALSE),
+(100, 'Mensagem Direta, enviada de forma privada', TRUE),
+(100, 'Documento de Marketing', FALSE),
+
+(101, 'Ataque onde o hacker se posiciona entre o usuário e o site, interceptando e manipulando as informações', TRUE),
+(101, 'Ataque que usa um vírus para corromper os dados', FALSE),
+(101, 'Ataque onde o hacker sequestra a comunicação entre duas partes e pode alterar os dados trocados ', FALSE),
+(101, 'Ataque que tenta derrubar um servidor de internet', FALSE),
+
+(102, 'Ataque que sobrecarrega um servidor com tráfego excessivo para derrubá-lo ', TRUE),
+(102, 'Ataque que sequestra um servidor para monitorar suas atividades', FALSE),
+(102, 'Ataque que instala malware no servidor', FALSE),
+(102, 'Ataque que rouba credenciais de login dos usuários', FALSE),
+
+(103, 'O HTTPS usa criptografia para proteger a comunicação, enquanto o HTTP não ', TRUE),
+(103, ' O HTTPS é usado apenas em redes locais ', FALSE),
+(103, 'O HTTPS é mais rápido que o HTTP ', FALSE),
+(103, 'O HTTP usa criptografia de ponta a ponta ', FALSE),
+
+(104, 'Uma falha de segurança desconhecida ou não corrigida ainda', TRUE),
+(104, 'Uma falha conhecida e corrigida rapidamente', FALSE),
+(104, 'Uma falha corrigida antes de ser explorada', FALSE),
+(104, 'Uma falha que não afeta sistemas operacionais ', FALSE),
+
+(105, 'Técnica de falsificar a identidade de um remetente de e-mail ou site para enganar a vítima', TRUE),
+(105, 'Técnica de criptografar dados para garantir sua privacidade', FALSE),
+(105, 'Método de rastrear e-mails sem ser detectado ', FALSE),
+(105, 'Ferramenta para bloquear ataques de phishing', FALSE),
+
+(106, 'Spyware coleta dados sem consentimento, enquanto ransomware bloqueia ou criptografa dados exigindo pagamento para restaurá-los', TRUE),
+(106, 'Spyware infecta redes, ransomware apenas computadores pessoais', FALSE),
+(106, 'Spyware exige pagamento antecipado, ransomware não', FALSE),
+(106, 'Spyware é sempre visível ao usuário, ransomware é invisível', FALSE),
+
+(107, 'Método de ataque baseado na manipulação psicológica de pessoas para obter informações confidenciais', TRUE),
+(107, 'Técnica de programação usada para criptografar dados', FALSE),
+(107, 'Invasão remota usando portas abertas no firewall', FALSE),
+(107, 'Criação de redes falsas para capturar dados', FALSE),
+
+(108, 'Anotar senhas em um papel para não esquecê-las', TRUE),
+(108, 'Utilizar senhas diferentes para cada serviço', FALSE),
+(108, 'Usar combinações de letras maiúsculas, minúsculas, números e símbolos', FALSE),
+(108, 'Ativar autenticação em dois fatores sempre que possível', FALSE),
+
+(109, 'Impedir que qualquer um — incluindo servidores intermediários — leia os dados transmitidos', TRUE),
+(109, 'Proteger os dados apenas enquanto estão armazenados no servidor', FALSE),
+(109, 'Garantir que somente o provedor de internet possa ver os dados', FALSE),
+(109, 'Aumentar a velocidade da conexão entre os usuários', FALSE),
+
+(110, 'Verificar o endereço de e-mail do remetente e não clicar em links suspeitos', TRUE),
+(110, 'Clicar em todos os links recebidos por e-mail para verificar sua veracidade', FALSE),
+(110, 'Compartilhar senhas com colegas de trabalho de confiança', FALSE),
+(110, 'Atualizar o antivírus apenas uma vez por mês', FALSE),
+
+(111, 'Sistema básico de entrada e saída que inicializa o hardware durante o boot do computador', TRUE),
+(111, ' Um tipo de memória RAM adicional', FALSE),
+(111, ' Software responsável pela proteção contra vírus', FALSE),
+(111, 'Parte do sistema operacional responsável pela interface gráfica', FALSE),
+
+(112, 'Uma variante do sistema operacional Linux, com diferentes versões e pacotes', TRUE),
+(112, 'A versão comercial do sistema Linux', FALSE),
+(112, 'A interface gráfica do Linux ', FALSE),
+(112, 'O núcleo do sistema operacional Linux', FALSE),
+
+(113, ' Identificador único de um dispositivo na internet', TRUE),
+(113, 'Identificador único para um dispositivo dentro de uma rede local ', FALSE),
+(113, 'O nome de domínio de um servidor de internet ', FALSE),
+(113, 'Tipo de protocolo utilizado para comunicação em uma rede ', FALSE),
+
+(114, 'Sequências de comandos que automatizam tarefas repetitivas', TRUE),
+(114, 'Funções criadas para realizar cálculos matemáticos simples ', FALSE),
+(114, 'Gráficos dinâmicos gerados automaticamente ', FALSE),
+(114, 'Ferramentas de análise de dados avançados', FALSE),
+
+(115, 'Retorna o valor de uma célula com base na posição de linha e coluna dentro de um intervalo', TRUE),
+(115, 'Calcula a soma de um intervalo de células ', FALSE),
+(115, 'Ordena as células em ordem crescente ou decrescente ', FALSE),
+(115, 'Conta o número de células vazias em um intervalo ', FALSE),
+
+(116, 'Selecionando a tabela e clicando em “Filtro” na aba “Dados” ', TRUE),
+(116, 'Usando o comando Ctrl + F ', FALSE),
+(116, 'Usando a função “PROCV” ', FALSE),
+(116, 'Selecionando células e clicando em “Ordenar”', FALSE),
+
+(117, 'Na aba “Inserir”, clicar em “Gráfico” e escolher o tipo de gráfico ', TRUE),
+(117, 'Usando a ferramenta “Inserir Imagem” ', FALSE),
+(117, 'Usando o comando Ctrl+G ', FALSE),
+(117, 'Inserindo uma tabela e transformando-a automaticamente em gráfico ', FALSE),
+
+(118, 'O SSD é muito mais rápido e resistente a choques', TRUE),
+(118, 'O SSD tem maior capacidade de armazenamento ', FALSE),
+(118, 'O SSD é mais barato que o HD ', FALSE),
+(118, 'O SSD é mais fácil de instalar que o HD', FALSE),
+
+(119, 'Aumento da frequência do processador para melhorar o desempenho', TRUE),
+(119, 'Aumento da memória RAM do sistema ', FALSE),
+(119, 'Aumento da capacidade do disco rígido ', FALSE),
+(119, 'Otimização de gráficos no computador ', FALSE),
+
+(120, 'Armazenar dados de forma rápida e eficiente', TRUE),
+(120, 'Controlar a temperatura do sistema ', FALSE),
+(120, 'Processar gráficos e imagens ', FALSE),
+(120, 'Estabilizar a rede de comunicação do computador', FALSE),
+
+(121, 'Algoritmo que simula o processo de seleção natural para encontrar soluções para um problema', TRUE),
+(121, 'Algoritmo que replica o funcionamento dos neurônios humanos ', FALSE),
+(121, 'Algoritmo que aprende com grandes volumes de dados históricos', FALSE),
+(121, 'Algoritmo que executa funções matemáticas complexas em tempo real', FALSE),
+
+(122, 'Subcampo da IA que usa redes neurais profundas para aprender com grandes volumes de dados', TRUE),
+(122, 'Sistema que usa dados não estruturados para aprender', FALSE),
+(122, 'Técnica de aprendizado baseada em simulação de comportamento humano', FALSE),
+(122, 'Algoritmo que ajusta automaticamente parâmetros de dados', FALSE),
+
+(123, 'IA fraca é especializada em tarefas específicas, enquanto IA forte busca replicar a inteligência humana completa', TRUE),
+(123, 'IA fraca tenta simular a consciência humana, enquanto IA forte é apenas para tarefas simples ', FALSE),
+(123, 'IA forte resolve problemas complexos, enquanto IA fraca realiza tarefas específicas ', FALSE),
+(123, 'IA forte é mais rápida, enquanto IA fraca usa menos dados ', FALSE),
+
+(124, 'Técnica de IA que permite que máquinas compreendam, interpretem e gerem linguagem humana', TRUE),
+(124, ' Técnica para traduzir textos de um idioma para outro ', FALSE),
+(124, ' Processo de ensinar uma máquina a ler textos em imagens ', FALSE),
+(124, 'Estratégia para traduzir comandos humanos em códigos de máquina ', FALSE),
+
+(125, 'Rede neural especializada no reconhecimento de imagens e vídeos', TRUE),
+(125, 'Rede neural usada para processamento de sequências de dados temporais ', FALSE),
+(125, 'Rede neural que simula o comportamento humano em uma conversa ', FALSE),
+(125, ' Rede neural que lida com dados estruturados e tabelas ', FALSE),
+
+(126, 'Modelo que usa dados rotulados para aprender a prever ou classificar dados ', TRUE),
+(126, 'Modelo que não utiliza dados rotulados', FALSE),
+(126, 'Modelo que aprende sem precisar de nenhum dado', FALSE),
+(126, 'Modelo que aprende de forma autônoma sem intervenção humana', FALSE),
+
+(127, 'Explicar de maneira transparente como chegou a uma decisão complexa', TRUE),
+(127, 'Traduzir frases curtas entre idiomas comuns', FALSE),
+(127, 'Reconhecer objetos em fotos de boa qualidade', FALSE),
+(127, 'Recomendar músicas com base nas preferências do usuário', FALSE),
+
+(128, 'Visão computacional para detecção de objetos', TRUE),
+(128, 'Síntese de imagem', FALSE),
+(128, 'Geração adversarial de vídeo', FALSE),
+(128, 'Compressão de dados sem perda', FALSE),
+
+(129, 'Gera imagens ou vídeos realistas de pessoas que nunca existiram', TRUE),
+(129, 'Oculta malwares em arquivos de imagem', FALSE),
+(129, 'Calcifica dados num formato comprimido', FALSE),
+(129, 'Substitui teclados físicos por virtuais', FALSE),
+
+(130, 'Visão computacional para detecção de objetos', TRUE),
+(130, 'Identificando bugs no código da plataforma', FALSE),
+(130, 'Produzindo músicas e vídeos automaticamente', FALSE),
+(130, 'Gravando o áudio dos usuários', FALSE),
+
+(131, 'Processo de analisar grandes quantidades de dados para encontrar padrões e insights', TRUE),
+(131, 'Método de limpar vírus de sistemas', FALSE),
+(131, 'Técnica de compactação de arquivos', FALSE),
+(131, 'Ferramenta para atualizar softwares automaticamente', FALSE),
+
+(132, 'Aprendizado onde a máquina recebe recompensas ou punições com base em ações', TRUE),
+(132, 'Treinamento supervisionado por humanos', FALSE),
+(132, 'Processo de aprendizado sem uso de algoritmos', FALSE),
+(132, 'Técnica usada apenas em jogos eletrônicos', FALSE),
+
+(133, 'Segmento da IA voltado para simular conversas humanas', TRUE),
+(133, 'Ferramenta de edição de vídeo automática', FALSE),
+(133, 'Mecanismo de busca de imagens', FALSE),
+(133, 'Sistema para detectar fraudes bancárias', FALSE),
+
+(134, 'Identificação e autenticação usando características físicas ou comportamentais', TRUE),
+(134, 'Reconhecimento de voz apenas por senha falada', FALSE),
+(134, 'Verificação de CAPTCHA em sites', FALSE),
+(134, 'Sistema de bloqueio de anúncios com IA', FALSE),
+
+(135, 'Sistema de segurança que detecta e responde a atividades suspeitas', TRUE),
+(135, 'Software de backup automático de arquivos', FALSE),
+(135, 'Programa antivírus tradicional', FALSE),
+(135, 'Plugin para otimização de desempenho', FALSE),
+
+(136, 'Backup realizado em tempo real conforme alterações são feitas', TRUE),
+(136, 'Backup feito manualmente uma vez por mês', FALSE),
+(136, 'Cópia duplicada em outro dispositivo', FALSE),
+(136, 'Backup realizado apenas em servidores locais', FALSE),
+
+(137, 'Sistema que permite gerenciar diferentes versões de um software', TRUE),
+(137, 'Ferramenta para instalar softwares automaticamente', FALSE),
+(137, 'Programa de edição gráfica com IA', FALSE),
+(137, 'Sistema de proteção de dados em nuvem', FALSE),
+
+(138, 'Conjunto de princípios e práticas para o uso responsável da IA', TRUE),
+(138, 'Método de treinar IA com menos dados', FALSE),
+(138, 'Processo de desinstalar IAs nocivas', FALSE),
+(138, 'Técnica para otimizar a velocidade de aprendizado', FALSE),
+
+(139, 'Ferramenta que permite testar e implantar código automaticamente', TRUE),
+(139, 'Sistema de reconhecimento de imagem em tempo real', FALSE),
+(139, 'Software de desenho digital', FALSE),
+(139, 'Editor de áudio para podcasts', FALSE),
+
+(140, 'Interface que permite conversar com a IA em linguagem natural', TRUE),
+(140, 'Sistema de compressão de dados em tempo real', FALSE),
+(140, 'Método de conectar bancos de dados a redes Wi-Fi', FALSE),
+(140, 'Plugin para tradução automática de arquivos PDF', FALSE),
+
+(141, 'Sistema de armazenamento e análise de dados em escala massiva', TRUE),
+(141, 'Banco de dados local para pequenas empresas', FALSE),
+(141, 'Disco rígido externo de alta capacidade', FALSE),
+(141, 'Planilha de controle de estoque automatizado', FALSE),
+
+(142, 'Uso de IA para detectar ameaças e proteger sistemas', TRUE),
+(142, 'IA usada apenas para identificar usuários online', FALSE),
+(142, 'Sistema de antivírus manual', FALSE),
+(142, 'Serviço de backup automático sem IA', FALSE),
+
+(143, 'Robôs que realizam tarefas repetitivas em sistemas digitais', TRUE),
+(143, 'Drones autônomos de entrega', FALSE),
+(143, 'Impressoras 3D com inteligência embutida', FALSE),
+(143, 'Assistentes virtuais com voz realista', FALSE),
+
+(144, 'Componente que simula o cérebro humano em uma IA', TRUE),
+(144, 'Sistema de armazenamento de dados temporários', FALSE),
+(144, 'Hardware dedicado à mineração de criptomoedas', FALSE),
+(144, 'Sistema de ventilação inteligente', FALSE),
+
+(145, 'Processo de ajuste fino em modelos de IA já treinados', TRUE),
+(145, 'Compressão de arquivos de dados', FALSE),
+(145, 'Atualização de sistemas operacionais', FALSE),
+(145, 'Limpeza automática de cache de navegador', FALSE),
+
+(146, 'Técnica que permite IA aprender com poucos exemplos', TRUE),
+(146, 'Treinamento usando milhões de dados', FALSE),
+(146, 'Forma de copiar outros modelos de IA', FALSE),
+(146, 'Estilo de programação para jogos', FALSE),
+
+(147, 'Método que permite IA raciocinar como humanos e resolver problemas novos', TRUE),
+(147, 'Modelo usado apenas para reconhecimento facial', FALSE),
+(147, 'Sistema de ordenação de arquivos por data', FALSE),
+(147, 'Plataforma de automação de e-mails', FALSE),
+
+(148, 'Conjunto de algoritmos especializados para tomada de decisões', TRUE),
+(148, 'Código-fonte de programas de IA abertos', FALSE),
+(148, 'Sistema de IA para reprodução de áudio', FALSE),
+(148, 'Assistente de voz baseado em Bluetooth', FALSE),
+
+(149, 'Técnica onde múltiplas IAs competem para melhorar a criação de dados realistas', TRUE),
+(149, 'Rede neural que opera offline', FALSE),
+(149, 'Sistema de IA que simula climas extremos', FALSE),
+(149, 'Método de compartilhamento de dados criptografados', FALSE),
+
+(150, 'Conjunto de dados usados para avaliar a performance de uma IA', TRUE),
+(150, 'Programa para limpar dados corrompidos', FALSE),
+(150, 'Sistema de conexão entre IA e sensores físicos', FALSE),
+(150, 'Arquivo de backup para algoritmos', FALSE);
+
+

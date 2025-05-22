@@ -12,21 +12,27 @@ app.use(express.static('public'));
 app.use(cors());
 app.use(express.json());
 
+
 // Rota para fazer o post dos dados do usuário
-app.post('/cadastro', (req, res) => {
-  const { nome, email } = req.body;
+app.post('/cadastro', async (req, res) => {
+  const { nome, email, turma_id, tipo_usuario } = req.body;
 
-  const sql = 'INSERT INTO jogadores (nome, email) VALUES (?, ?)';
-  conexao.query(sql, [nome, email], (erro, resultado) => {
-    if (erro) {
-      console.error('Erro ao cadastrar usuário:', erro);
-      return res.status(500).send('Erro ao cadastrar');
-    }
+  if (!nome || !email || !turma_id || !tipo_usuario) {
+    return res.status(400).send('Dados incompletos');
+  }
 
-    res.send('Usuário cadastrado com sucesso!');
-  });
+  try {
+    const [result] = await pool.query(
+      'INSERT INTO jogadores (nome, email, turma_id, tipo_usuario) VALUES (?, ?, ?, ?)',
+      [nome, email, turma_id, tipo_usuario]
+    );
+    const jogador_id = result.insertId;
+    res.json({ mensagem: 'Usuário cadastrado com sucesso!', jogador_id });
+  } catch (erro) {
+    console.error('Erro ao cadastrar usuário:', erro);
+    res.status(500).send('Erro ao cadastrar');
+  }
 });
-
 
 
 
@@ -34,31 +40,33 @@ app.post('/cadastro', (req, res) => {
 app.get('/perguntas', async (req, res) => {
   try {
     const temas = [1, 2, 3, 4, 5];
+    const niveis = [1, 2, 3];
     let perguntasComRespostas = [];
 
-    for (const temaId of temas) {
-      // Busca 2 perguntas aleatórias do tema
-      const [perguntas] = await pool.query(
-        'SELECT * FROM perguntas WHERE tema_id = ? ORDER BY RAND() LIMIT 2',
-        [temaId]
-      );
-
-      for (const p of perguntas) {
-        // Busca respostas para cada pergunta
-        const [respostas] = await pool.query(
-          'SELECT * FROM respostas WHERE pergunta_id = ?',
-          [p.id]
+    for (const nivelId of niveis) {
+      for (const temaId of temas) {
+        // 2 perguntas aleatórias por nível e tema
+        const [perguntas] = await pool.query(
+          'SELECT * FROM perguntas WHERE nivel_id = ? AND tema_id = ? ORDER BY RAND() LIMIT 2',
+          [nivelId, temaId]
         );
 
-        perguntasComRespostas.push({
-          id: p.id,
-          pergunta: p.enunciado,
-          tempo_resposta: p.tempo_resposta,
-          respostas: respostas.map(r => ({
-            texto: r.resposta,
-            correta: r.correta === 1,
-          }))
-        });
+        for (const p of perguntas) {
+          const [respostas] = await pool.query(
+            'SELECT * FROM respostas WHERE pergunta_id = ?',
+            [p.id]
+          );
+
+          perguntasComRespostas.push({
+            id: p.id,
+            pergunta: p.enunciado,
+            tempo_resposta: p.tempo_resposta,
+            respostas: respostas.map(r => ({
+              texto: r.resposta,
+              correta: r.correta === 1,
+            }))
+          });
+        }
       }
     }
 
@@ -68,6 +76,47 @@ app.get('/perguntas', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao buscar perguntas' });
   }
 });
+
+// POST /ranking
+app.post('/ranking', async (req, res) => {
+  const { jogador_id, pontuacao } = req.body;
+
+  if (!jogador_id || pontuacao === undefined) {
+    return res.status(400).json({ erro: 'Dados incompletos' });
+  }
+
+  try {
+    await pool.query(
+      'INSERT INTO ranking (jogador_id, pontuacao) VALUES (?, ?)',
+      [jogador_id, pontuacao]
+    );
+    res.status(201).json({ mensagem: 'Pontuação registrada com sucesso' });
+  } catch (error) {
+    console.error('Erro ao inserir ranking:', error);
+    res.status(500).json({ erro: 'Erro interno ao registrar pontuação' });
+  }
+});
+
+
+// GET /ranking
+app.get('/ranking', async (req, res) => {
+  try {
+    const [result] = await pool.query(`
+      SELECT jogadores.nome, ranking.pontuacao
+      FROM ranking
+      JOIN jogadores ON ranking.jogador_id = jogadores.id
+      ORDER BY ranking.pontuacao DESC
+      LIMIT 10
+    `);
+
+    res.json(result);
+  } catch (error) {
+    console.error('Erro ao buscar ranking:', error);
+    res.status(500).json({ erro: 'Erro ao buscar ranking' });
+  }
+});
+
+
 
 app.get('/turmas', async (req, res) => {
   try {

@@ -145,7 +145,13 @@
   <div class="container hidden" id="result-screen">
     <h2>Quiz Finalizado!</h2>
     <p id="final-score"></p>
-    <button class="start-btn" onclick="resetQuiz()">Voltar ao Início</button>
+    <button class="start-btn" id="btn-show-ranking" onclick="showRanking()">Ver o Ranking Geral</button>
+  </div>
+
+    <div class="container hidden" id="ranking-screen">
+    <h2>Veja o Ranking dos jogadores!</h2>
+    <p id="ranking-score"></p>
+    <button class="start-btn" onclick="resetQuiz()">Reset Quiz</button>
   </div>
 
   <script src="index.js" defer></script>
